@@ -1,3 +1,2 @@
-from django.shortcuts import render
+"""Views for booking flows and schedule management."""
 
-# Create your views here.

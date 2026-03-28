@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+"""Tests for the offers app will be added with the first offer workflows."""

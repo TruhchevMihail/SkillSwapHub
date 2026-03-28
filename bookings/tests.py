@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+"""Tests for bookings will be added once booking flows are implemented."""

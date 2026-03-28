@@ -1,3 +1,2 @@
-from django.shortcuts import render
+"""Views for creating, browsing, and managing offers."""
 
-# Create your views here.

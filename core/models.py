@@ -1,3 +1,1 @@
-from django.db import models
-
-# Create your models here.
+"""Core models are intentionally empty at this stage."""
