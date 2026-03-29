@@ -1,257 +1,120 @@
 # SkillSwap Hub
 
-A Django-based skill exchange platform where users can offer and book skill-sharing sessions.
+Platform за обмен на умения между потребители. Хората могат да създават оферти за умения, които знаят, и да резервират сесии с други потребители.
 
-## 📋 Project Overview
+## За проекта
 
-SkillSwap Hub is a peer-to-peer skill exchange platform that allows users to:
-- Create and manage skill offers
-- Browse and filter available skills
-- Book sessions with mentors
-- Leave reviews and ratings
-- Build a portfolio of skills
+Основната идея е да създадем място където хората могат да обмениват знания. Ако знаеш Python, можеш да предложиш сесии. Ако искаш да научиш Photoshop, можеш да потърсиш предложение.
 
-## 🛠 Tech Stack
+Функционалности:
+- Създаване и управление на собствени умения
+- Преглед на всички налични умения с филтриране
+- Система за харесване на умения
+- Преглед на своите оферти
+- Оценки и отзиви (планирано)
 
-- **Backend**: Django 5.1+, Django REST Framework
-- **Database**: PostgreSQL (configured via .env)
-- **Frontend**: HTML5, Django Templates
-- **Testing**: Django TestCase
-- **Authentication**: Custom AppUser model
-- **Task Queue**: Celery (planned)
+## Технология
 
-## 📁 Project Structure
+Backend: Django 5.1  
+Database: PostgreSQL или SQLite за тестване  
+Шаблони: Django HTML  
+Тестване: Django TestCase  
+
+## Структура на проекта
 
 ```
 SkillSwap-Hub/
-├── accounts/          # User authentication & profiles
-├── core/              # Home page & core views
-├── offers/            # Skill offers management (MAIN APP)
-├── bookings/          # Session bookings
-├── reviews/           # Ratings & reviews
-├── SkillSwap_Hub/     # Project settings
-├── templates/         # HTML templates
-├── staticfiles/       # Static files (CSS, JS, images)
-├── media/             # User uploads
+├── accounts/          # Регистрация и логин
+├── core/              # Начална страница
+├── offers/            # Основното приложение - умения
+├── bookings/          # Резервации (WIP)
+├── reviews/           # Отзиви (WIP)
+├── SkillSwap_Hub/     # Настройки на Django
+├── templates/         # HTML файлове
 ├── manage.py
-├── requirements.txt
-└── .env               # Environment variables
+└── requirements.txt
 ```
 
-## 🚀 Quick Start
+## Как да стартирате
 
-### 1. Prerequisites
-
-- Python 3.11+
-- pip & virtualenv
-- PostgreSQL (for production) or SQLite (development)
-
-### 2. Installation
-
+Клонирате репозиторито:
 ```bash
-# Clone the repository
 git clone https://github.com/TruhchevMihail/SkillSwapHub.git
 cd SkillSwap-Hub
-
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file (copy from .env.example)
-cp .env.example .env
-# Edit .env with your settings
 ```
 
-### 3. Database Setup
-
+Създавате виртуално окръжение:
 ```bash
-# Run migrations
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+Инсталирате зависимостите:
+```bash
+pip install -r requirements.txt
+```
+
+Настройвате базата данни:
+```bash
 python manage.py migrate
-
-# Create superuser (admin account)
 python manage.py createsuperuser
-
-# Load sample data
 python manage.py populate_sample_data
 ```
 
-### 4. Run Development Server
-
+Стартирате приложението:
 ```bash
 python manage.py runserver
-# Access at http://127.0.0.1:8000/
 ```
 
-### 5. Access Admin Panel
+Сайтът ще е на http://127.0.0.1:8000/
 
-```
-http://127.0.0.1:8000/admin/
-# Login with superuser credentials
-```
+## Модели
 
-## 📚 Main Features
+### SkillCategory
+Категории като Programming, Design, Music, etc.
 
-### Users & Authentication
-- ✅ Custom AppUser model with profile pictures
-- ✅ User registration, login, logout
-- ✅ Profile management
+### Tag
+Тагове като Python, Photoshop, Remote, etc.
 
-### Skill Offers (Core Feature)
-- ✅ Create, edit, delete skill offers
-- ✅ Categories and tags system
-- ✅ Price per session
-- ✅ Difficulty levels (Beginner, Intermediate, Advanced)
-- ✅ Image uploads
-- ✅ Filtering & sorting
+### SkillOffer
+Основния модел - предложение за умение. Съдържа:
+- Заглавие и описание
+- Цена за сесия
+- Продължителност на сесията
+- Ниво (Beginner, Intermediate, Advanced)
+- Снимка
+- Собственик (потребител)
+- Категория
+- Тагове
 
-### Favorites
-- ✅ Add/remove offers to favorites
-- ✅ View favorite offers list
-- ✅ One-to-one favorite list per user
+### Material
+Файлове/материали за дадено умение.
 
-### Admin Interface
-- ✅ Manage users
-- ✅ Manage categories, tags, offers
-- ✅ View materials & uploads
-- ✅ Monitor favorites
+### FavoriteList
+Списък на харесаните умения на потребител.
 
-## 🧪 Testing
+## Основни функции
 
-Run all tests:
+Может да се регистрирате и логнете.
+
+След логване може да създавате умения (оферти). Има форма за въвеждане на информацията.
+
+Може да видите всички умения в списък. Може да филтрирате по категория, ниво или цена.
+
+Може да добавяте умения в любими.
+
+За своите умения може да видите всички, да ги редактирате или изтривате.
+
+## Тестване
+
+Може да стартирате тестовете:
 ```bash
-python manage.py test --verbosity=2
+python manage.py test
 ```
 
-Run specific app tests:
-```bash
-python manage.py test offers  # Test offers app
-python manage.py test accounts  # Test accounts app
-```
+В момента има 41 теста които преминават.
 
-**Current Test Coverage**:
-- 41 total tests
-- 35 tests for offers app
-- Model validations, views, templates all tested
+## За проекта
 
-## 📝 Database Models
-
-### 5 Core Models:
-
-1. **SkillCategory** — Categories for offers (Programming, Design, Music, etc.)
-2. **Tag** — Tags for offers (Python, Photoshop, Remote, etc.)
-3. **SkillOffer** — Main model for skill offerings with:
-   - Foreign Key to AppUser (owner)
-   - Foreign Key to SkillCategory
-   - Many-to-Many to Tag
-   - Image field for offer pictures
-   - Price, duration, level fields
-   - Created/Updated timestamps
-
-4. **Material** — Files/notes uploaded for offers
-   - Foreign Key to SkillOffer
-   - Foreign Key to AppUser (uploader)
-
-5. **FavoriteList** — User's favorite offers
-   - One-to-One relationship to AppUser
-   - Many-to-Many to SkillOffer
-
-## 🔗 URL Routes
-
-| Route | View | Purpose |
-|-------|------|---------|
-| `/` | Home | Homepage |
-| `/accounts/register/` | RegisterUserView | User registration |
-| `/accounts/login/` | SignInView | User login |
-| `/accounts/logout/` | SignOutView | User logout |
-| `/offers/` | OfferListView | Browse all offers |
-| `/offers/create/` | OfferCreateView | Create new offer |
-| `/offers/<pk>/` | OfferDetailView | View offer details |
-| `/offers/<pk>/edit/` | OfferUpdateView | Edit offer |
-| `/offers/<pk>/delete/` | OfferDeleteView | Delete offer |
-| `/offers/my-offers/` | MyOffersListView | View own offers |
-| `/offers/favorites/` | FavoriteOffersListView | View favorites |
-| `/offers/<pk>/favorite/` | ToggleFavoriteView | Add/remove favorite |
-| `/admin/` | Django Admin | Admin panel |
-
-## 🔐 Security Features
-
-- ✅ LoginRequiredMixin for protected views
-- ✅ Owner-only edit/delete protection
-- ✅ CSRF token validation
-- ✅ Secure user authentication
-- ✅ Environment variable config (no hardcoded secrets)
-
-## 📦 Environment Variables (.env)
-
-```
-# Core
-SECRET_KEY=your-django-secret-key
-DEBUG=True
-
-# Database
-DB_NAME=skillswapdb
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=localhost
-DB_PORT=5432
-
-# Allowed hosts
-ALLOWED_HOSTS=127.0.0.1,localhost
-```
-
-## 📲 Pages & Navigation
-
-**Public Pages** (accessible without login):
-- Home page
-- Offers list (with filtering)
-- Offer details
-- Login page
-- Register page
-
-**Private Pages** (login required):
-- Create offer
-- My offers
-- Favorite offers
-- Edit/delete own offers
-
-**Admin Pages**:
-- User management
-- Category management
-- Tag management
-- Offer management
-- Material management
-
-## 🚀 Deployment
-
-The project is configured for deployment on:
-- Heroku
-- PythonAnywhere
-- AWS (with RDS for PostgreSQL)
-- DigitalOcean
-
-See deployment guide in `docs/DEPLOYMENT.md` (coming soon)
-
-## 📄 License
-
-This project is for educational purposes (SoftUni Django Advanced Course).
-
-## 👤 Author
-
-Developed as part of SoftUni Django Advanced Regular Exam (2026)
-
-## 📞 Support
-
-For issues or questions:
-1. Check the documentation
-2. Review GitHub issues
-3. Check test files for usage examples
-
----
-
-**Status**: ✅ Development in progress
-
-**Current Phase**: Day 2 - Offers App Implementation Complete
+Това е учебен проект за курс Django Advanced в SoftUni.
 
