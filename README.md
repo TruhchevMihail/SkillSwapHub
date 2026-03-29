@@ -1,120 +1,73 @@
 # SkillSwap Hub
 
-Platform за обмен на умения между потребители. Хората могат да създават оферти за умения, които знаят, и да резервират сесии с други потребители.
+## Български
 
-## За проекта
+SkillSwap Hub е уеб приложение за обмен на умения между потребители. Всеки може да създава оферти за умения, да разглежда наличните предложения и да запазва любими.
 
-Основната идея е да създадем място където хората могат да обмениват знания. Ако знаеш Python, можеш да предложиш сесии. Ако искаш да научиш Photoshop, можеш да потърсиш предложение.
+### Основни функции
+- Регистрация, вход и изход
+- Създаване, редакция и изтриване на оферти
+- Филтриране по категория, ниво и цена
+- Любими оферти
+- Админ панел за управление
 
-Функционалности:
-- Създаване и управление на собствени умения
-- Преглед на всички налични умения с филтриране
-- Система за харесване на умения
-- Преглед на своите оферти
-- Оценки и отзиви (планирано)
+### Технологии
+- Django
+- PostgreSQL (или SQLite за локални тестове)
+- Django Template Engine
+- Django TestCase
 
-## Технология
-
-Backend: Django 5.1  
-Database: PostgreSQL или SQLite за тестване  
-Шаблони: Django HTML  
-Тестване: Django TestCase  
-
-## Структура на проекта
-
-```
-SkillSwap-Hub/
-├── accounts/          # Регистрация и логин
-├── core/              # Начална страница
-├── offers/            # Основното приложение - умения
-├── bookings/          # Резервации (WIP)
-├── reviews/           # Отзиви (WIP)
-├── SkillSwap_Hub/     # Настройки на Django
-├── templates/         # HTML файлове
-├── manage.py
-└── requirements.txt
-```
-
-## Как да стартирате
-
-Клонирате репозиторито:
+### Стартиране (локално)
 ```bash
 git clone https://github.com/TruhchevMihail/SkillSwapHub.git
 cd SkillSwap-Hub
-```
-
-Създавате виртуално окръжение:
-```bash
 python -m venv .venv
 .venv\Scripts\activate
-```
-
-Инсталирате зависимостите:
-```bash
 pip install -r requirements.txt
-```
-
-Настройвате базата данни:
-```bash
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py populate_sample_data
-```
-
-Стартирате приложението:
-```bash
 python manage.py runserver
 ```
 
-Сайтът ще е на http://127.0.0.1:8000/
+Приложението ще е достъпно на `http://127.0.0.1:8000/`.
 
-## Модели
-
-### SkillCategory
-Категории като Programming, Design, Music, etc.
-
-### Tag
-Тагове като Python, Photoshop, Remote, etc.
-
-### SkillOffer
-Основния модел - предложение за умение. Съдържа:
-- Заглавие и описание
-- Цена за сесия
-- Продължителност на сесията
-- Ниво (Beginner, Intermediate, Advanced)
-- Снимка
-- Собственик (потребител)
-- Категория
-- Тагове
-
-### Material
-Файлове/материали за дадено умение.
-
-### FavoriteList
-Списък на харесаните умения на потребител.
-
-## Основни функции
-
-Может да се регистрирате и логнете.
-
-След логване може да създавате умения (оферти). Има форма за въвеждане на информацията.
-
-Може да видите всички умения в списък. Може да филтрирате по категория, ниво или цена.
-
-Може да добавяте умения в любими.
-
-За своите умения може да видите всички, да ги редактирате или изтривате.
-
-## Тестване
-
-Може да стартирате тестовете:
+### Тестове
 ```bash
 python manage.py test
 ```
 
-В момента има 41 теста които преминават.
+## English
 
-## За проекта
+SkillSwap Hub is a web application for peer-to-peer skill exchange. Users can publish skill offers, browse available offers, and keep favorites.
 
-Това е учебен проект за курс Django Advanced в SoftUni.
+### Main Features
+- User registration, login, and logout
+- Create, edit, and delete skill offers
+- Filtering by category, level, and price
+- Favorite offers
+- Admin panel for management
 
+### Tech Stack
+- Django
+- PostgreSQL (or SQLite for local testing)
+- Django Template Engine
+- Django TestCase
+
+### Local Setup
+```bash
+git clone https://github.com/TruhchevMihail/SkillSwapHub.git
+cd SkillSwap-Hub
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+The app will be available at `http://127.0.0.1:8000/`.
+
+### Tests
+```bash
+python manage.py test
+```

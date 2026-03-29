@@ -1,5 +1,3 @@
-"""Views for creating, browsing, and managing offers."""
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -13,8 +11,6 @@ from .models import FavoriteList, SkillOffer
 
 
 class OfferListView(ListView):
-    """Display all active skill offers with filtering and sorting options."""
-    
     model = SkillOffer
     template_name = 'offers/offer-list.html'
     context_object_name = 'offers'
@@ -63,16 +59,12 @@ class OfferListView(ListView):
 
 
 class OfferDetailView(DetailView):
-    """Display details of a single skill offer."""
-    
     model = SkillOffer
     template_name = 'offers/offer-detail.html'
     context_object_name = 'offer'
 
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
-    """Create a new skill offer."""
-    
     model = SkillOffer
     form_class = SkillOfferCreateForm
     template_name = 'offers/offer-create.html'
@@ -83,8 +75,6 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
 
 
 class OfferUpdateView(LoginRequiredMixin, UpdateView):
-    """Edit an existing skill offer (owner only)."""
-    
     model = SkillOffer
     form_class = SkillOfferEditForm
     template_name = 'offers/offer-edit.html'
@@ -94,8 +84,6 @@ class OfferUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class OfferDeleteView(LoginRequiredMixin, DeleteView):
-    """Delete a skill offer (owner only) with confirmation."""
-    
     model = SkillOffer
     template_name = 'offers/offer-delete.html'
     success_url = reverse_lazy('offer-list')
@@ -105,8 +93,6 @@ class OfferDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class MyOffersListView(LoginRequiredMixin, ListView):
-    """Display all offers created by the current user."""
-    
     model = SkillOffer
     template_name = 'offers/my-offers.html'
     context_object_name = 'offers'
@@ -116,8 +102,6 @@ class MyOffersListView(LoginRequiredMixin, ListView):
 
 
 class FavoriteOffersListView(LoginRequiredMixin, ListView):
-    """Display all offers in the user's favorite list."""
-    
     model = SkillOffer
     template_name = 'offers/favorites.html'
     context_object_name = 'offers'
@@ -128,8 +112,6 @@ class FavoriteOffersListView(LoginRequiredMixin, ListView):
 
 
 class ToggleFavoriteView(LoginRequiredMixin, View):
-    """Add or remove a skill offer from the user's favorite list."""
-    
     def post(self, request, pk):
         offer = get_object_or_404(SkillOffer, pk=pk)
         favorite_list, _ = FavoriteList.objects.get_or_create(user=request.user)
@@ -140,5 +122,3 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
             favorite_list.offers.add(offer)
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse_lazy('offer-list')))
-
-

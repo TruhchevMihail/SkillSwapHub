@@ -1,6 +1,3 @@
-"""
-Django management command to populate sample data.
-"""
 
 from django.core.management.base import BaseCommand
 from offers.models import SkillCategory, Tag

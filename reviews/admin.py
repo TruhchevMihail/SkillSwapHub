@@ -1,1 +1,1 @@
-"""Admin registrations for the reviews app."""
+from django.contrib import admin

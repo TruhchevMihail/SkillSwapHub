@@ -1,5 +1,3 @@
-"""Models for the offers app."""
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -7,8 +5,6 @@ from django.urls import reverse
 
 
 class SkillCategory(models.Model):
-    """A category for skill offers (e.g., Programming, Design, Music)."""
-    
     name = models.CharField(
         max_length=50,
         unique=True,
@@ -23,8 +19,6 @@ class SkillCategory(models.Model):
 
 
 class Tag(models.Model):
-    """A tag to label skill offers (e.g., Python, Photoshop, Remote)."""
-    
     name = models.CharField(
         max_length=30,
         unique=True,
@@ -35,8 +29,6 @@ class Tag(models.Model):
 
 
 class SkillOffer(models.Model):
-    """A skill offer that a user can create and others can book."""
-    
     LEVEL_BEGINNER = 'Beginner'
     LEVEL_INTERMEDIATE = 'Intermediate'
     LEVEL_ADVANCED = 'Advanced'
@@ -129,8 +121,6 @@ class SkillOffer(models.Model):
 
 
 class Material(models.Model):
-    """A material (file) uploaded by the owner for a skill offer."""
-    
     title = models.CharField(
         max_length=100,
     )
@@ -160,8 +150,6 @@ class Material(models.Model):
 
 
 class FavoriteList(models.Model):
-    """A user's list of favorite skill offers."""
-    
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -176,5 +164,4 @@ class FavoriteList(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s favorites"
-
 

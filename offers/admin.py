@@ -1,5 +1,3 @@
-"""Admin registrations for the offers app."""
-
 from django.contrib import admin
 
 from .models import SkillCategory, Tag, SkillOffer, Material, FavoriteList

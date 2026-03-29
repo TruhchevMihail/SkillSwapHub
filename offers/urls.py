@@ -1,5 +1,3 @@
-"""URL routing for the offers app."""
-
 from django.urls import path
 
 from .views import (
@@ -23,4 +21,3 @@ urlpatterns = [
     path('<int:pk>/delete/', OfferDeleteView.as_view(), name='offer-delete'),
     path('<int:pk>/favorite/', ToggleFavoriteView.as_view(), name='toggle-favorite'),
 ]
-

@@ -1,7 +1,3 @@
-"""
-Main settings for the SkillSwap Hub project.
-"""
-
 import os
 from pathlib import Path
 
