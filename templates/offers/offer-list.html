@@ -1,0 +1,27 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>All Skill Offers</h1>
+
+    <form method="get">
+        {{ filter_form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if offers %}
+        <ul>
+            {% for offer in offers %}
+                <li>
+                    <a href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
+                    - {{ offer.category.name }}
+                    - {{ offer.level }}
+                    - {{ offer.price_per_session }} lv.
+                    - by {{ offer.owner.username }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No offers found.</p>
+    {% endif %}
+{% endblock %}
+

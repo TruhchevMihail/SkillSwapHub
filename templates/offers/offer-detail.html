@@ -1,0 +1,40 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>{{ offer.title }}</h1>
+
+    <p><strong>Category:</strong> {{ offer.category.name }}</p>
+    <p><strong>Level:</strong> {{ offer.level }}</p>
+    <p><strong>Price:</strong> {{ offer.price_per_session }} lv.</p>
+    <p><strong>Duration:</strong> {{ offer.duration_minutes }} minutes</p>
+    <p><strong>Owner:</strong> {{ offer.owner.username }}</p>
+    <p><strong>Description:</strong> {{ offer.description }}</p>
+
+    <p>
+        <strong>Tags:</strong>
+        {% for tag in offer.tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            No tags
+        {% endfor %}
+    </p>
+
+    {% if offer.image %}
+        <img src="{{ offer.image.url }}" alt="{{ offer.title }}" width="250">
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'toggle-favorite' offer.pk %}">
+            {% csrf_token %}
+            <button type="submit">Toggle Favorite</button>
+        </form>
+    {% endif %}
+
+    {% if request.user == offer.owner %}
+        <p>
+            <a href="{% url 'offer-edit' offer.pk %}">Edit</a>
+            <a href="{% url 'offer-delete' offer.pk %}">Delete</a>
+        </p>
+    {% endif %}
+{% endblock %}
+

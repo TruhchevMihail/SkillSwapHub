@@ -1,0 +1,20 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>My Offers</h1>
+
+    {% if offers %}
+        <ul>
+            {% for offer in offers %}
+                <li>
+                    <a href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
+                    - {{ offer.category.name }}
+                    - {{ offer.price_per_session }} lv.
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no offers yet.</p>
+    {% endif %}
+{% endblock %}
+
