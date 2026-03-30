@@ -1,14 +1,23 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<section>
-    <h1>Sign in</h1>
-    <p>Welcome back. Continue where you left off.</p>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign in</button>
-    </form>
-</section>
+<div class="form-wrap">
+    <div class="page-header" style="text-align:center;">
+        <h1>Sign in</h1>
+        <p>Welcome back.</p>
+    </div>
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" style="width:100%;" type="submit">Sign in</button>
+            </div>
+        </form>
+        <hr class="divider">
+        <p style="text-align:center;color:var(--muted);font-size:.88rem;">
+            No account yet? <a href="{% url 'register' %}">Create one</a>
+        </p>
+    </div>
+</div>
 {% endblock %}

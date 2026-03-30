@@ -1,19 +1,33 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-    <h1>Favorite Offers</h1>
+<div class="page-header">
+    <h1>Saved Offers</h1>
+    <p>Offers you have bookmarked for later.</p>
+</div>
 
-    {% if offers %}
-        <ul>
-            {% for offer in offers %}
-                <li>
+{% if offers %}
+    <div class="card-grid">
+        {% for offer in offers %}
+            <div class="card">
+                <div class="card-title">
                     <a href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
-                    - {{ offer.owner.username }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No favorite offers yet.</p>
-    {% endif %}
+                </div>
+                <div class="card-meta">
+                    <span>{{ offer.category.name }}</span>
+                    <span>by {{ offer.owner.username }}</span>
+                </div>
+                <div class="card-price">{{ offer.price_per_session }} lv. / session</div>
+                <div class="card-actions">
+                    <a class="btn btn-primary btn-sm" href="{% url 'offer-detail' offer.pk %}">View</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>You haven't saved any offers yet.</p>
+        <a class="btn btn-primary" href="{% url 'offer-list' %}">Browse offers</a>
+    </div>
+{% endif %}
 {% endblock %}
-

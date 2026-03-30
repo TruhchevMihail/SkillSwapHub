@@ -1,15 +1,23 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-    <h1>Delete Offer</h1>
-
-    <p>Are you sure you want to delete "{{ object.title }}"?</p>
-
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Confirm delete</button>
-    </form>
-
-    <a href="{% url 'offer-detail' object.pk %}">Cancel</a>
+<div class="form-wrap">
+    <div class="alert alert-danger">
+        <strong>You are about to permanently delete this offer.</strong><br>
+        This action cannot be undone.
+    </div>
+    <div class="card">
+        <h1 style="font-size:1.3rem;font-weight:700;margin-bottom:8px;">Delete "{{ object.title }}"?</h1>
+        <p style="color:var(--muted);margin-bottom:20px;">
+            All bookings linked to this offer will also be removed.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button class="btn btn-danger" type="submit">Yes, delete it</button>
+                <a class="btn btn-ghost" href="{% url 'offer-detail' object.pk %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
-

@@ -1,12 +1,20 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-    <h1>Create Offer</h1>
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create</button>
-    </form>
+<div class="form-wrap-wide">
+    <div class="page-header">
+        <h1>Create a new offer</h1>
+        <p class="form-subtitle">Share your knowledge with the community.</p>
+    </div>
+    <div class="card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Create offer</button>
+                <a class="btn btn-ghost" href="{% url 'offer-list' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
-

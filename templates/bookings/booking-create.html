@@ -1,18 +1,29 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-    <h1>Book a Session</h1>
+<div class="form-wrap">
+    <div class="page-header">
+        <h1>Book a Session</h1>
+    </div>
 
-    <p><strong>Offer:</strong> {{ offer.title }}</p>
-    <p><strong>Mentor:</strong> {{ offer.owner.username }}</p>
-    <p><strong>Price:</strong> {{ offer.price_per_session }} lv.</p>
-    <p><strong>Duration:</strong> {{ offer.duration_minutes }} min</p>
+    <div class="card" style="margin-bottom:16px;">
+        <dl class="info-grid">
+            <dt>Offer</dt>  <dd>{{ offer.title }}</dd>
+            <dt>Mentor</dt> <dd>{{ offer.owner.username }}</dd>
+            <dt>Price</dt>  <dd>{{ offer.price_per_session }} lv.</dd>
+            <dt>Duration</dt><dd>{{ offer.duration_minutes }} min</dd>
+        </dl>
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit Booking</button>
-        <a href="{% url 'offer-detail' offer.pk %}">Back to offer</a>
-    </form>
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Submit booking</button>
+                <a class="btn btn-ghost" href="{% url 'offer-detail' offer.pk %}">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
-

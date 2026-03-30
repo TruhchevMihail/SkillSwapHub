@@ -1,14 +1,23 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<section>
-    <h1>Create your account</h1>
-    <p>Join the community and share your skills.</p>
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create account</button>
-    </form>
-</section>
+<div class="form-wrap">
+    <div class="page-header" style="text-align:center;">
+        <h1>Create your account</h1>
+        <p>Join the community and share your skills.</p>
+    </div>
+    <div class="card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" style="width:100%;" type="submit">Create account</button>
+            </div>
+        </form>
+        <hr class="divider">
+        <p style="text-align:center;color:var(--muted);font-size:.88rem;">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </p>
+    </div>
+</div>
 {% endblock %}

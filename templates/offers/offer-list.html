@@ -1,27 +1,45 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
+<div class="page-header">
     <h1>All Skill Offers</h1>
+    <p>Find the right mentor for your next skill.</p>
+</div>
 
+<div class="filter-card">
     <form method="get">
         {{ filter_form.as_p }}
-        <button type="submit">Filter</button>
+        <button class="btn btn-primary btn-sm" type="submit">Filter</button>
     </form>
+</div>
 
-    {% if offers %}
-        <ul>
-            {% for offer in offers %}
-                <li>
+{% if offers %}
+    <div class="card-grid">
+        {% for offer in offers %}
+            <div class="card">
+                {% if offer.image %}
+                    <img src="{{ offer.image.url }}" alt="{{ offer.title }}"
+                         style="width:100%;height:160px;object-fit:cover;border-radius:7px;margin-bottom:12px;">
+                {% endif %}
+                <div class="card-title">
                     <a href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
-                    - {{ offer.category.name }}
-                    - {{ offer.level }}
-                    - {{ offer.price_per_session }} lv.
-                    - by {{ offer.owner.username }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No offers found.</p>
-    {% endif %}
+                </div>
+                <div class="card-meta">
+                    <span>{{ offer.category.name }}</span>
+                    <span class="badge badge-{{ offer.level|lower }}">{{ offer.level }}</span>
+                    <span>by {{ offer.owner.username }}</span>
+                </div>
+                <div class="card-price">{{ offer.price_per_session }} lv. / session</div>
+                <div class="card-actions">
+                    <a class="btn btn-primary btn-sm" href="{% url 'offer-detail' offer.pk %}">View offer</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>No offers match your search.</p>
+        <a class="btn btn-ghost" href="{% url 'offer-list' %}">Clear filters</a>
+    </div>
+{% endif %}
 {% endblock %}
-

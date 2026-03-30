@@ -1,29 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillSwap Hub</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
 <header>
     <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'offer-list' %}">Offers</a>
+        <a class="nav-brand" href="{% url 'home' %}">⚡ SkillSwap Hub</a>
+        <a href="{% url 'offer-list' %}">Browse Offers</a>
 
         {% if request.user.is_authenticated %}
-            <a href="{% url 'offer-create' %}">Create Offer</a>
+            <a href="{% url 'offer-create' %}">+ New Offer</a>
             <a href="{% url 'my-offers' %}">My Offers</a>
-            <a href="{% url 'favorite-offers' %}">Favorites</a>
+            <a href="{% url 'favorite-offers' %}">Saved</a>
             <a href="{% url 'my-bookings' %}">My Bookings</a>
-            <a href="{% url 'mentor-bookings' %}">Mentor Bookings</a>
-
-            <span>Hi, {{ request.user.username }}</span>
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            <a href="{% url 'mentor-bookings' %}">Requests</a>
+            <span class="nav-spacer"></span>
+            <span class="nav-user">{{ request.user.username }}</span>
+            <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit">Sign out</button>
             </form>
         {% else %}
+            <span class="nav-spacer"></span>
             <a href="{% url 'login' %}">Sign in</a>
             <a href="{% url 'register' %}">Create account</a>
         {% endif %}
@@ -35,7 +38,7 @@
 </main>
 
 <footer>
-    <small>&copy; {% now 'Y' %} SkillSwap Hub</small>
+    <small>&copy; {% now "Y" %} SkillSwap Hub — learn by sharing, share by learning</small>
 </footer>
 </body>
 </html>

@@ -1,16 +1,19 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<section>
-    <h1>Learn by teaching, teach by sharing</h1>
-    <p>SkillSwap Hub helps people exchange practical skills in a friendly community.</p>
-
+<div class="hero">
+    <h1>Learn by teaching,<br>teach by sharing</h1>
+    <p>SkillSwap Hub connects people who want to exchange practical skills in a friendly community.</p>
     {% if not request.user.is_authenticated %}
-        <p>
-            New here?
-            <a href="{% url 'register' %}">Create an account</a>
-            and start sharing what you know.
-        </p>
+        <div class="hero-cta">
+            <a class="btn btn-accent" href="{% url 'register' %}">Get started — it's free</a>
+            <a class="btn btn-ghost" href="{% url 'offer-list' %}" style="color:#fff;border-color:rgba(255,255,255,.5)">Browse offers</a>
+        </div>
+    {% else %}
+        <div class="hero-cta">
+            <a class="btn btn-accent" href="{% url 'offer-create' %}">+ Share a skill</a>
+            <a class="btn btn-ghost" href="{% url 'offer-list' %}" style="color:#fff;border-color:rgba(255,255,255,.5)">Browse offers</a>
+        </div>
     {% endif %}
-</section>
+</div>
 {% endblock %}

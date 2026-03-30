@@ -1,18 +1,34 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-    <h1>Update Booking Status</h1>
+<div class="form-wrap">
+    <div class="page-header">
+        <h1>Update Status</h1>
+    </div>
 
-    <p><strong>Offer:</strong> {{ object.offer.title }}</p>
-    <p><strong>Learner:</strong> {{ object.learner.username }}</p>
-    <p><strong>Preferred date:</strong> {{ object.preferred_date|date:"d M Y, H:i" }}</p>
-    <p><strong>Current status:</strong> {{ object.status }}</p>
+    <div class="card" style="margin-bottom:16px;">
+        <dl class="info-grid">
+            <dt>Offer</dt>   <dd>{{ object.offer.title }}</dd>
+            <dt>Learner</dt> <dd>{{ object.learner.username }}</dd>
+            <dt>Date</dt>    <dd>{{ object.preferred_date|date:"d M Y, H:i" }}</dd>
+            <dt>Status</dt>
+            <dd>
+                {% with s=object.status|lower %}
+                    <span class="badge badge-{{ s }}">{{ object.status }}</span>
+                {% endwith %}
+            </dd>
+        </dl>
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save status</button>
-        <a href="{% url 'booking-detail' object.pk %}">Back</a>
-    </form>
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Save status</button>
+                <a class="btn btn-ghost" href="{% url 'booking-detail' object.pk %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
-
