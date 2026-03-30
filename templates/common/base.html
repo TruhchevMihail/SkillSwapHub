@@ -15,6 +15,8 @@
             <a href="{% url 'offer-create' %}">Create Offer</a>
             <a href="{% url 'my-offers' %}">My Offers</a>
             <a href="{% url 'favorite-offers' %}">Favorites</a>
+            <a href="{% url 'my-bookings' %}">My Bookings</a>
+            <a href="{% url 'mentor-bookings' %}">Mentor Bookings</a>
 
             <span>Hi, {{ request.user.username }}</span>
             <form method="post" action="{% url 'logout' %}" style="display:inline;">

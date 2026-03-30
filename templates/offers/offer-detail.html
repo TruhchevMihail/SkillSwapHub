@@ -30,6 +30,12 @@
         </form>
     {% endif %}
 
+    {% if request.user.is_authenticated and request.user != offer.owner %}
+        <p>
+            <a href="{% url 'booking-create' offer.pk %}">Book this session</a>
+        </p>
+    {% endif %}
+
     {% if request.user == offer.owner %}
         <p>
             <a href="{% url 'offer-edit' offer.pk %}">Edit</a>

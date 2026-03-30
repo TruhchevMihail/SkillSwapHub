@@ -1,0 +1,28 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>Booking Details</h1>
+
+    <p><strong>Offer:</strong> <a href="{% url 'offer-detail' booking.offer.pk %}">{{ booking.offer.title }}</a></p>
+    <p><strong>Mentor:</strong> {{ booking.offer.owner.username }}</p>
+    <p><strong>Learner:</strong> {{ booking.learner.username }}</p>
+    <p><strong>Preferred date:</strong> {{ booking.preferred_date|date:"d M Y, H:i" }}</p>
+    <p><strong>Status:</strong> {{ booking.status }}</p>
+    <p><strong>Message:</strong> {{ booking.message|default:"No message provided." }}</p>
+
+    {% if request.user == booking.learner %}
+        {% if booking.status == 'Pending' or booking.status == 'Approved' %}
+            <form method="post" action="{% url 'booking-cancel' booking.pk %}">
+                {% csrf_token %}
+                <button type="submit">Cancel booking</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    {% if request.user == booking.offer.owner %}
+        <p>
+            <a href="{% url 'booking-status-update' booking.pk %}">Update status</a>
+        </p>
+    {% endif %}
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>Update Booking Status</h1>
+
+    <p><strong>Offer:</strong> {{ object.offer.title }}</p>
+    <p><strong>Learner:</strong> {{ object.learner.username }}</p>
+    <p><strong>Preferred date:</strong> {{ object.preferred_date|date:"d M Y, H:i" }}</p>
+    <p><strong>Current status:</strong> {{ object.status }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save status</button>
+        <a href="{% url 'booking-detail' object.pk %}">Back</a>
+    </form>
+{% endblock %}
+

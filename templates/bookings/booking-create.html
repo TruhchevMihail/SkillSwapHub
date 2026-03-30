@@ -1,0 +1,18 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>Book a Session</h1>
+
+    <p><strong>Offer:</strong> {{ offer.title }}</p>
+    <p><strong>Mentor:</strong> {{ offer.owner.username }}</p>
+    <p><strong>Price:</strong> {{ offer.price_per_session }} lv.</p>
+    <p><strong>Duration:</strong> {{ offer.duration_minutes }} min</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Booking</button>
+        <a href="{% url 'offer-detail' offer.pk %}">Back to offer</a>
+    </form>
+{% endblock %}
+

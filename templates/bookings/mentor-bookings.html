@@ -1,0 +1,21 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h1>Bookings for My Offers</h1>
+
+    {% if bookings %}
+        <ul>
+            {% for booking in bookings %}
+                <li>
+                    <a href="{% url 'booking-detail' booking.pk %}">{{ booking.offer.title }}</a>
+                    &mdash; learner: {{ booking.learner.username }}
+                    &mdash; {{ booking.preferred_date|date:"d M Y, H:i" }}
+                    &mdash; <strong>{{ booking.status }}</strong>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings for your offers yet.</p>
+    {% endif %}
+{% endblock %}
+
