@@ -1,34 +1,34 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="form-wrap">
-    <div class="page-header">
-        <h1>Update Status</h1>
-    </div>
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <h1 class="h3 mb-4">Update Booking Status</h1>
 
-    <div class="card" style="margin-bottom:16px;">
-        <dl class="info-grid">
-            <dt>Offer</dt>   <dd>{{ object.offer.title }}</dd>
-            <dt>Learner</dt> <dd>{{ object.learner.username }}</dd>
-            <dt>Date</dt>    <dd>{{ object.preferred_date|date:"d M Y, H:i" }}</dd>
-            <dt>Status</dt>
-            <dd>
-                {% with s=object.status|lower %}
-                    <span class="badge badge-{{ s }}">{{ object.status }}</span>
-                {% endwith %}
-            </dd>
-        </dl>
-    </div>
-
-    <div class="card">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Save status</button>
-                <a class="btn btn-ghost" href="{% url 'booking-detail' object.pk %}">Cancel</a>
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <dl class="info-grid mb-0">
+                    <dt>Offer</dt>    <dd>{{ object.offer.title }}</dd>
+                    <dt>Learner</dt>  <dd>{{ object.learner.username }}</dd>
+                    <dt>Date</dt>     <dd>{{ object.preferred_date|date:"d M Y, H:i" }}</dd>
+                    <dt>Status</dt>
+                    <dd><span class="badge badge-{{ object.status|lower }}">{{ object.status }}</span></dd>
+                </dl>
             </div>
-        </form>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body django-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn btn-primary" type="submit">Save status</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'booking-detail' object.pk %}">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,29 +1,34 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="form-wrap">
-    <div class="page-header">
-        <h1>Book a Session</h1>
-    </div>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h1 class="h3 mb-4"><i class="bi bi-calendar-check"></i> Book a Session</h1>
 
-    <div class="card" style="margin-bottom:16px;">
-        <dl class="info-grid">
-            <dt>Offer</dt>  <dd>{{ offer.title }}</dd>
-            <dt>Mentor</dt> <dd>{{ offer.owner.username }}</dd>
-            <dt>Price</dt>  <dd>{{ offer.price_per_session }} lv.</dd>
-            <dt>Duration</dt><dd>{{ offer.duration_minutes }} min</dd>
-        </dl>
-    </div>
-
-    <div class="card">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Submit booking</button>
-                <a class="btn btn-ghost" href="{% url 'offer-detail' offer.pk %}">Back</a>
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <dl class="info-grid mb-0">
+                    <dt>Offer</dt>    <dd>{{ offer.title }}</dd>
+                    <dt>Mentor</dt>  <dd>{{ offer.owner.username }}</dd>
+                    <dt>Price</dt>   <dd class="fw-semibold text-primary">€{{ offer.price_per_session }}</dd>
+                    <dt>Duration</dt><dd>{{ offer.duration_minutes }} min</dd>
+                </dl>
             </div>
-        </form>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body django-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn btn-primary" type="submit">Submit booking</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'offer-detail' offer.pk %}">Back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
+

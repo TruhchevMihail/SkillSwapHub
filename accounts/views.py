@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -19,6 +20,13 @@ class RegisterUserView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+
+        role_name = form.cleaned_data.get('role')
+        mentors_group, _ = Group.objects.get_or_create(name='Mentors')
+        learners_group, _ = Group.objects.get_or_create(name='Learners')
+        selected_group = mentors_group if role_name == 'Mentors' else learners_group
+        self.object.groups.add(selected_group)
+
         login(self.request, self.object)
         return response
 

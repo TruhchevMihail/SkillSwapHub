@@ -1,0 +1,65 @@
+[
+  {
+    "id": 7,
+    "offer": "Advanced JavaScript & Async Patterns",
+    "mentor": "mentor2",
+    "learner": "learner2",
+    "status": "Completed",
+    "preferred_date": "2026-03-25T13:32:25.284333+00:00",
+    "created_at": "2026-03-30T13:32:25.295091+00:00"
+  },
+  {
+    "id": 6,
+    "offer": "Spanish Conversation Practice",
+    "mentor": "mentor1",
+    "learner": "learner1",
+    "status": "Completed",
+    "preferred_date": "2026-03-20T13:32:25.284333+00:00",
+    "created_at": "2026-03-30T13:32:25.290932+00:00"
+  },
+  {
+    "id": 5,
+    "offer": "Advanced JavaScript & Async Patterns",
+    "mentor": "mentor2",
+    "learner": "admin",
+    "status": "Approved",
+    "preferred_date": "2026-05-20T12:02:00+00:00",
+    "created_at": "2026-03-30T13:18:16.487959+00:00"
+  },
+  {
+    "id": 4,
+    "offer": "Figma UI Design from Scratch",
+    "mentor": "mentor2",
+    "learner": "learner2",
+    "status": "Rejected",
+    "preferred_date": "2026-04-02T13:16:19.204968+00:00",
+    "created_at": "2026-03-30T13:16:19.217610+00:00"
+  },
+  {
+    "id": 3,
+    "offer": "Django REST Framework \u2014 Build Real APIs",
+    "mentor": "mentor1",
+    "learner": "learner2",
+    "status": "Pending",
+    "preferred_date": "2026-04-06T13:16:19.204968+00:00",
+    "created_at": "2026-03-30T13:16:19.214553+00:00"
+  },
+  {
+    "id": 2,
+    "offer": "Acoustic Guitar \u2014 First Steps",
+    "mentor": "mentor2",
+    "learner": "learner1",
+    "status": "Pending",
+    "preferred_date": "2026-04-09T13:16:19.204968+00:00",
+    "created_at": "2026-03-30T13:16:19.211385+00:00"
+  },
+  {
+    "id": 1,
+    "offer": "Python for Absolute Beginners",
+    "mentor": "mentor1",
+    "learner": "learner1",
+    "status": "Approved",
+    "preferred_date": "2026-04-04T13:16:19.204968+00:00",
+    "created_at": "2026-03-30T13:16:19.207679+00:00"
+  }
+]

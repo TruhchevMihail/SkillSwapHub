@@ -1,54 +1,72 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div style="max-width:640px;margin:0 auto;">
-    <div class="page-header">
-        <h1>Booking Details</h1>
-    </div>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h1 class="h3 mb-4">Booking Details</h1>
 
-    <div class="card">
-        <dl class="info-grid">
-            <dt>Offer</dt>
-            <dd><a href="{% url 'offer-detail' booking.offer.pk %}">{{ booking.offer.title }}</a></dd>
-            <dt>Mentor</dt>
-            <dd>{{ booking.offer.owner.username }}</dd>
-            <dt>Learner</dt>
-            <dd>{{ booking.learner.username }}</dd>
-            <dt>Date</dt>
-            <dd>{{ booking.preferred_date|date:"d M Y, H:i" }}</dd>
-            <dt>Status</dt>
-            <dd>
-                {% with s=booking.status|lower %}
-                    <span class="badge badge-{{ s }}">{{ booking.status }}</span>
-                {% endwith %}
-            </dd>
-        </dl>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <dl class="info-grid">
+                    <dt>Offer</dt>
+                    <dd><a href="{% url 'offer-detail' booking.offer.pk %}">{{ booking.offer.title }}</a></dd>
+                    <dt>Mentor</dt>   <dd>{{ booking.offer.owner.username }}</dd>
+                    <dt>Learner</dt>  <dd>{{ booking.learner.username }}</dd>
+                    <dt>Date</dt>     <dd>{{ booking.preferred_date|date:"d M Y, H:i" }}</dd>
+                    <dt>Status</dt>
+                    <dd>
+                        <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                    </dd>
+                </dl>
 
-        {% if booking.message %}
-            <hr class="divider">
-            <p style="color:var(--muted);font-size:.9rem;font-style:italic;">
-                "{{ booking.message }}"
-            </p>
-        {% endif %}
-
-        <hr class="divider">
-
-        <div class="form-actions">
-            {% if request.user == booking.learner %}
-                {% if booking.status == 'Pending' or booking.status == 'Approved' %}
-                    <form method="post" action="{% url 'booking-cancel' booking.pk %}">
-                        {% csrf_token %}
-                        <button class="btn btn-danger btn-sm" type="submit">Cancel booking</button>
-                    </form>
+                {% if booking.message %}
+                    <hr>
+                    <p class="text-muted fst-italic small">
+                        <i class="bi bi-chat-left-quote"></i> {{ booking.message }}
+                    </p>
                 {% endif %}
-            {% endif %}
 
-            {% if request.user == booking.offer.owner %}
-                <a class="btn btn-primary btn-sm" href="{% url 'booking-status-update' booking.pk %}">Update status</a>
-            {% endif %}
+                <hr>
 
-            <a class="btn btn-ghost btn-sm" href="{% url 'offer-detail' booking.offer.pk %}">Back to offer</a>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if request.user == booking.learner %}
+                        {% if booking.status == 'Pending' or booking.status == 'Approved' %}
+                            <form method="post" action="{% url 'booking-cancel' booking.pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    <i class="bi bi-x-circle"></i> Cancel booking
+                                </button>
+                            </form>
+                        {% endif %}
+                        {% if can_leave_review %}
+                                <a class="btn btn-warning btn-sm"
+                                   href="{% url 'review-create' booking.pk %}">
+                                    <i class="bi bi-star-half"></i> Leave a review
+                                </a>
+                        {% elif request.user == booking.learner and review_obj %}
+                                <a class="btn btn-outline-secondary btn-sm"
+                                   href="{% url 'review-edit' review_obj.pk %}">
+                                    <i class="bi bi-pencil"></i> Edit my review
+                                </a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user == booking.offer.owner %}
+                        <a class="btn btn-primary btn-sm"
+                           href="{% url 'booking-status-update' booking.pk %}">
+                            <i class="bi bi-pencil"></i> Update status
+                        </a>
+                    {% endif %}
+
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url 'offer-detail' booking.offer.pk %}">
+                        Back to offer
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
+

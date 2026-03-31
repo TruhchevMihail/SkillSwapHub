@@ -1,39 +1,55 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="page-header">
-    <h1>My Offers</h1>
-    <p>Manage the skills you are sharing.</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">My Offers</h1>
+    <a class="btn btn-primary btn-sm" href="{% url 'offer-create' %}">
+        <i class="bi bi-plus-circle"></i> New Offer
+    </a>
 </div>
 
 {% if offers %}
-    <div class="card-grid">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for offer in offers %}
-            <div class="card">
-                <div class="card-title">
-                    <a href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
-                </div>
-                <div class="card-meta">
-                    <span>{{ offer.category.name }}</span>
-                    <span class="badge badge-{{ offer.level|lower }}">{{ offer.level }}</span>
-                    {% if offer.is_active %}
-                        <span class="badge badge-approved">Active</span>
-                    {% else %}
-                        <span class="badge badge-cancelled">Hidden</span>
-                    {% endif %}
-                </div>
-                <div class="card-price">{{ offer.price_per_session }} lv. / session</div>
-                <div class="card-actions">
-                    <a class="btn btn-ghost btn-sm" href="{% url 'offer-edit' offer.pk %}">Edit</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'offer-delete' offer.pk %}">Delete</a>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{% url 'offer-detail' offer.pk %}" class="text-decoration-none text-dark">
+                                {{ offer.title }}
+                            </a>
+                        </h5>
+                        <div class="mb-2">
+                            <span class="badge badge-{{ offer.level|lower }} me-1">{{ offer.level }}</span>
+                            <span class="badge bg-light text-secondary border">{{ offer.category.name }}</span>
+                            {% if offer.is_active %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary border">Hidden</span>
+                            {% endif %}
+                        </div>
+                        <p class="fw-semibold text-primary mb-0 mt-auto">€{{ offer.price_per_session }} / session</p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm flex-fill"
+                           href="{% url 'offer-edit' offer.pk %}">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a class="btn btn-outline-danger btn-sm flex-fill"
+                           href="{% url 'offer-delete' offer.pk %}">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% else %}
     <div class="empty-state">
+        <i class="bi bi-journal-plus fs-1 d-block mb-3 text-muted"></i>
         <p>You haven't created any offers yet.</p>
-        <a class="btn btn-primary" href="{% url 'offer-create' %}">+ Create your first offer</a>
+        <a class="btn btn-primary" href="{% url 'offer-create' %}">Create your first offer</a>
     </div>
 {% endif %}
 {% endblock %}
+

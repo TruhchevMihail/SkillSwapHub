@@ -1,0 +1,8 @@
+id,offer,mentor,learner,status,preferred_date,created_at
+7,Advanced JavaScript & Async Patterns,mentor2,learner2,Completed,2026-03-25T13:32:25.284333+00:00,2026-03-30T13:32:25.295091+00:00
+6,Spanish Conversation Practice,mentor1,learner1,Completed,2026-03-20T13:32:25.284333+00:00,2026-03-30T13:32:25.290932+00:00
+5,Advanced JavaScript & Async Patterns,mentor2,admin,Approved,2026-05-20T12:02:00+00:00,2026-03-30T13:18:16.487959+00:00
+4,Figma UI Design from Scratch,mentor2,learner2,Rejected,2026-04-02T13:16:19.204968+00:00,2026-03-30T13:16:19.217610+00:00
+3,Django REST Framework — Build Real APIs,mentor1,learner2,Pending,2026-04-06T13:16:19.204968+00:00,2026-03-30T13:16:19.214553+00:00
+2,Acoustic Guitar — First Steps,mentor2,learner1,Pending,2026-04-09T13:16:19.204968+00:00,2026-03-30T13:16:19.211385+00:00
+1,Python for Absolute Beginners,mentor1,learner1,Approved,2026-04-04T13:16:19.204968+00:00,2026-03-30T13:16:19.207679+00:00

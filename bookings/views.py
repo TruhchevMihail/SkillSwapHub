@@ -7,15 +7,19 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from core.activity import log_activity
+from core.mixins import GroupRequiredMixin
+from core.models import ActivityLog
 from offers.models import SkillOffer
 from .forms import BookingCreateForm, BookingStatusUpdateForm
 from .models import Booking
 
 
-class BookingCreateView(LoginRequiredMixin, CreateView):
+class BookingCreateView(GroupRequiredMixin, CreateView):
     model = Booking
     form_class = BookingCreateForm
     template_name = 'bookings/booking-create.html'
+    required_group_names = ('Learners',)
 
     def dispatch(self, request, *args, **kwargs):
         self.offer = get_object_or_404(SkillOffer, pk=self.kwargs['offer_pk'])
@@ -28,7 +32,14 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.offer = self.offer
         form.instance.learner = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        log_activity(
+            actor=self.request.user,
+            action=ActivityLog.ACTION_BOOKING_CREATED,
+            target_object=self.object,
+            note=f'Booked offer: {self.offer.title}',
+        )
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,10 +47,11 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class MyBookingsListView(LoginRequiredMixin, ListView):
+class MyBookingsListView(GroupRequiredMixin, ListView):
     model = Booking
     template_name = 'bookings/my-bookings.html'
     context_object_name = 'bookings'
+    required_group_names = ('Learners',)
 
     def get_queryset(self):
         return Booking.objects.filter(
@@ -47,10 +59,11 @@ class MyBookingsListView(LoginRequiredMixin, ListView):
         ).select_related('offer', 'offer__owner', 'offer__category')
 
 
-class MentorBookingsListView(LoginRequiredMixin, ListView):
+class MentorBookingsListView(GroupRequiredMixin, ListView):
     model = Booking
     template_name = 'bookings/mentor-bookings.html'
     context_object_name = 'bookings'
+    required_group_names = ('Mentors',)
 
     def get_queryset(self):
         return Booking.objects.filter(
@@ -67,27 +80,49 @@ class BookingDetailView(LoginRequiredMixin, DetailView):
         return Booking.objects.filter(
             Q(learner=self.request.user) |
             Q(offer__owner=self.request.user)
-        ).select_related('offer', 'learner', 'offer__owner', 'offer__category')
+        ).select_related('offer', 'learner', 'offer__owner', 'offer__category', 'review')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        review = getattr(self.object, 'review', None)
+        context['review_obj'] = review
+        context['can_leave_review'] = (
+            self.request.user == self.object.learner
+            and self.object.status == Booking.Status.COMPLETED
+            and review is None
+        )
+        return context
 
 
-class BookingStatusUpdateView(LoginRequiredMixin, UpdateView):
+class BookingStatusUpdateView(GroupRequiredMixin, UpdateView):
     model = Booking
     form_class = BookingStatusUpdateForm
     template_name = 'bookings/booking-status-update.html'
+    required_group_names = ('Mentors',)
 
     def get_queryset(self):
         return Booking.objects.filter(offer__owner=self.request.user)
 
     def form_valid(self, form):
         booking = form.instance
+        previous_status = self.get_object().status
 
-        if booking.status == Booking.Status.CANCELLED:
+        if previous_status == Booking.Status.CANCELLED:
             raise PermissionDenied('Cancelled bookings cannot be updated.')
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        log_activity(
+            actor=self.request.user,
+            action=ActivityLog.ACTION_BOOKING_STATUS_CHANGED,
+            target_object=self.object,
+            note=f'Status {previous_status} -> {self.object.status}',
+        )
+        return response
 
 
-class BookingCancelView(LoginRequiredMixin, View):
+class BookingCancelView(GroupRequiredMixin, View):
+    required_group_names = ('Learners',)
+
     def post(self, request, pk):
         booking = get_object_or_404(
             Booking,
@@ -101,7 +136,14 @@ class BookingCancelView(LoginRequiredMixin, View):
         booking.status = Booking.Status.CANCELLED
         booking.save()
 
+        log_activity(
+            actor=request.user,
+            action=ActivityLog.ACTION_BOOKING_CANCELLED,
+            target_object=booking,
+        )
+
         return HttpResponseRedirect(reverse('booking-detail', kwargs={'pk': booking.pk}))
+
 
 
 

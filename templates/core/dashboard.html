@@ -1,0 +1,211 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<h1 class="h3 mb-4">
+    <i class="bi bi-speedometer2"></i> Dashboard
+    <small class="text-muted fs-6 fw-normal ms-2">Hi, {{ request.user.first_name|default:request.user.username }}</small>
+</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">{{ my_offers_count }}</div>
+                <div class="stat-label">My Offers</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">{{ my_bookings_count }}</div>
+                <div class="stat-label">My Bookings</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">{{ mentor_bookings_count }}</div>
+                <div class="stat-label">Requests Received</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">{{ my_reviews_count }}</div>
+                <div class="stat-label">Reviews Written</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">{{ received_reviews_count }}</div>
+                <div class="stat-label">Reviews Received</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card shadow-sm text-center h-100 stat-card">
+            <div class="card-body">
+                <div class="stat-number">
+                    {% if mentor_avg_rating %}
+                        {{ mentor_avg_rating|floatformat:1 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+                <div class="stat-label">Avg Mentor Rating</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 stat-card text-center">
+            <div class="card-body">
+                <div class="stat-number">{{ mentor_completion_rate|floatformat:0 }}%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 stat-card text-center">
+            <div class="card-body">
+                <div class="stat-number">
+                    {% if avg_response_hours %}{{ avg_response_hours|floatformat:1 }}h{% else %}-{% endif %}
+                </div>
+                <div class="stat-label">Avg Response Time</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-calendar2-check text-primary"></i> Recent Bookings I Made
+            </div>
+            <div class="card-body p-0">
+                {% if recent_my_bookings %}
+                    <ul class="list-group list-group-flush">
+                        {% for booking in recent_my_bookings %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{% url 'booking-detail' booking.pk %}"
+                                       class="text-decoration-none fw-semibold text-dark">
+                                        {{ booking.offer.title }}
+                                    </a>
+                                    <div class="text-muted small">
+                                        {{ booking.preferred_date|date:"d M Y" }}
+                                    </div>
+                                </div>
+                                <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No bookings yet.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-transparent">
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'my-bookings' %}">
+                    View all bookings
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-inbox text-primary"></i> Recent Requests for My Offers
+            </div>
+            <div class="card-body p-0">
+                {% if recent_mentor_bookings %}
+                    <ul class="list-group list-group-flush">
+                        {% for booking in recent_mentor_bookings %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{% url 'booking-detail' booking.pk %}"
+                                       class="text-decoration-none fw-semibold text-dark">
+                                        {{ booking.offer.title }}
+                                    </a>
+                                    <div class="text-muted small">
+                                        from {{ booking.learner.username }}
+                                    </div>
+                                </div>
+                                <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No requests yet.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-transparent">
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'mentor-bookings' %}">
+                    View all requests
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-trophy text-primary"></i> Top Mentors
+            </div>
+            <div class="card-body p-0">
+                {% if top_mentors %}
+                    <ul class="list-group list-group-flush">
+                        {% for mentor in top_mentors %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">{{ mentor.mentor__username }}</span>
+                                <span>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    {{ mentor.avg_rating|floatformat:1 }}
+                                    <span class="text-muted small">({{ mentor.reviews_count }})</span>
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No mentor ratings yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-clock-history text-primary"></i> Recent Activity
+            </div>
+            <div class="card-body p-0">
+                {% if recent_activity %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in recent_activity %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ item.get_action_display }}</span>
+                                <span class="text-muted small">{{ item.created_at|date:"d M, H:i" }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No activity yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

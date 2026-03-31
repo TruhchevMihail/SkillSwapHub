@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2,
+    "offer": "Advanced JavaScript & Async Patterns",
+    "author": "learner2",
+    "mentor": "mentor2",
+    "rating": 4,
+    "comment": "Sara explained closures and the event loop really clearly. A few examples could be more practical, but overall a great session.",
+    "created_at": "2026-03-30T13:32:25.319058+00:00"
+  },
+  {
+    "id": 1,
+    "offer": "Spanish Conversation Practice",
+    "author": "learner1",
+    "mentor": "mentor1",
+    "rating": 5,
+    "comment": "Alex was incredibly patient and the session felt completely natural. My confidence in speaking Spanish improved a lot.",
+    "created_at": "2026-03-30T13:32:25.313126+00:00"
+  }
+]

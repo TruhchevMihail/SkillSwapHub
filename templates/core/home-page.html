@@ -5,15 +5,13 @@
     <h1>Learn by teaching,<br>teach by sharing</h1>
     <p>SkillSwap Hub connects people who want to exchange practical skills in a friendly community.</p>
     {% if not request.user.is_authenticated %}
-        <div class="hero-cta">
-            <a class="btn btn-accent" href="{% url 'register' %}">Get started — it's free</a>
-            <a class="btn btn-ghost" href="{% url 'offer-list' %}" style="color:#fff;border-color:rgba(255,255,255,.5)">Browse offers</a>
-        </div>
+        <a class="btn btn-light btn-lg me-2" href="{% url 'register' %}">Get started — it's free</a>
+        <a class="btn btn-outline-light btn-lg" href="{% url 'offer-list' %}">Browse offers</a>
     {% else %}
-        <div class="hero-cta">
-            <a class="btn btn-accent" href="{% url 'offer-create' %}">+ Share a skill</a>
-            <a class="btn btn-ghost" href="{% url 'offer-list' %}" style="color:#fff;border-color:rgba(255,255,255,.5)">Browse offers</a>
-        </div>
+        <a class="btn btn-light btn-lg me-2" href="{% url 'offer-create' %}">
+            <i class="bi bi-plus-circle"></i> Share a skill
+        </a>
+        <a class="btn btn-outline-light btn-lg" href="{% url 'offer-list' %}">Browse offers</a>
     {% endif %}
 </div>
 {% endblock %}

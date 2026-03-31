@@ -1,0 +1,94 @@
+/* ── Custom overrides on top of Bootstrap 5 ── */
+
+:root {
+    --ss-primary: #4361ee;
+    --ss-accent:  #f72585;
+    --ss-dark:    #1b1f3b;
+}
+
+body { background: #f0f2f8; }
+
+/* ── Navbar ── */
+.navbar { background: var(--ss-dark) !important; }
+.navbar-brand { font-weight: 700; letter-spacing: .3px; }
+
+/* ── Hero ── */
+.hero {
+    background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
+    border-radius: 14px;
+    color: #fff;
+    padding: 72px 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.hero h1 { font-size: 2.3rem; font-weight: 800; }
+.hero p  { opacity: .85; max-width: 520px; margin: 12px auto 28px; font-size: 1.05rem; }
+
+/* ── Cards ── */
+.card { border: 1px solid #dde1ec; border-radius: 10px; transition: box-shadow .2s, transform .2s; }
+.card:hover { box-shadow: 0 6px 24px rgba(67,97,238,.13); transform: translateY(-2px); }
+.card-img-top { height: 160px; object-fit: cover; border-radius: 10px 10px 0 0; }
+
+/* ── Skill-level & status badges ── */
+.badge-beginner     { background: #d1fae5; color: #065f46; }
+.badge-intermediate { background: #fef3c7; color: #92400e; }
+.badge-advanced     { background: #ede9fe; color: #5b21b6; }
+.badge-pending      { background: #fff3cd; color: #856404; }
+.badge-approved     { background: #d1fae5; color: #065f46; }
+.badge-rejected     { background: #fee2e2; color: #991b1b; }
+.badge-cancelled    { background: #e5e7eb; color: #374151; }
+.badge-completed    { background: #dbeafe; color: #1e40af; }
+
+/* ── Tag pills ── */
+.skill-tag {
+    background: #eef0ff;
+    color: var(--ss-primary);
+    border-radius: 20px;
+    padding: 2px 12px;
+    font-size: .78rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* ── Info grid (dl > dt + dd) ── */
+.info-grid { display: grid; grid-template-columns: 140px 1fr; gap: 8px 12px; }
+.info-grid dt { font-weight: 600; color: #6b7280; font-size: .88rem; }
+.info-grid dd { font-size: .9rem; color: #1b1f3b; }
+
+/* ── Django as_p form rendering ── */
+.django-form p            { margin-bottom: 1rem; }
+.django-form label        { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 4px; color: #1b1f3b; }
+.django-form input:not([type=checkbox]),
+.django-form select,
+.django-form textarea     { width: 100%; padding: 8px 12px; border: 1.5px solid #dde1ec; border-radius: 7px; font-size: .93rem; font-family: inherit; background: #fff; transition: border-color .15s, box-shadow .15s; }
+.django-form input:focus,
+.django-form select:focus,
+.django-form textarea:focus { outline: none; border-color: var(--ss-primary); box-shadow: 0 0 0 3px rgba(67,97,238,.12); }
+.django-form ul             { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.django-form ul li label    { font-weight: 400; cursor: pointer; padding: 4px 10px; border: 1.5px solid #dde1ec; border-radius: 6px; display: flex; align-items: center; gap: 5px; }
+.django-form ul li label:hover { border-color: var(--ss-primary); }
+.django-form .helptext      { font-size: .77rem; color: #6b7280; display: block; margin-top: 3px; }
+.django-form .errorlist     { list-style: none; padding: 0; color: #ef476f; font-size: .82rem; }
+
+/* ── Empty state ── */
+.empty-state { text-align: center; padding: 60px 20px; color: #6b7280; }
+.empty-state p { margin-bottom: 16px; font-size: 1rem; }
+
+/* ── Footer ── */
+footer { background: var(--ss-dark); color: rgba(255,255,255,.5); font-size: .82rem; }
+
+/* ── Dashboard stat cards ── */
+.stat-card .card-body { padding: 1rem .5rem; }
+.stat-number { font-size: 2rem; font-weight: 800; color: var(--ss-primary); line-height: 1; }
+.stat-label  { font-size: .75rem; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+/* ── Reviews ── */
+.star-rating { font-size: 1rem; white-space: nowrap; }
+.review-card { transition: background .15s; }
+.review-card:hover { background: #f8f9fc; border-radius: 8px; }
+
+/* ── Radio rating widget ── */
+.django-form input[type=radio] { width: auto; margin-right: 4px; }
+
+
+

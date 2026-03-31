@@ -1,20 +1,22 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="form-wrap-wide">
-    <div class="page-header">
-        <h1>Create a new offer</h1>
-        <p class="form-subtitle">Share your knowledge with the community.</p>
-    </div>
-    <div class="card">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Create offer</button>
-                <a class="btn btn-ghost" href="{% url 'offer-list' %}">Cancel</a>
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h3 mb-1">Create a new offer</h1>
+        <p class="text-muted mb-4">Share your knowledge with the community.</p>
+        <div class="card shadow-sm">
+            <div class="card-body django-form">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn btn-primary" type="submit">Create offer</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'offer-list' %}">Cancel</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

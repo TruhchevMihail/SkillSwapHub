@@ -1,0 +1,7 @@
+id,title,owner,category,price_per_session,duration_minutes,level,is_active,tags,created_at
+6,Advanced JavaScript & Async Patterns,mentor2,Programming,50.00,90,Advanced,True,"JavaScript, Advanced",2026-03-30T13:16:19.196293+00:00
+5,Spanish Conversation Practice,mentor1,Languages,18.00,50,Intermediate,True,Remote,2026-03-30T13:16:19.186954+00:00
+4,Acoustic Guitar — First Steps,mentor2,Music,20.00,45,Beginner,True,"Guitar, Beginner Friendly",2026-03-30T13:16:19.176905+00:00
+3,Figma UI Design from Scratch,mentor2,Design,35.00,60,Beginner,True,"Figma, Beginner Friendly",2026-03-30T13:16:19.168028+00:00
+2,Django REST Framework — Build Real APIs,mentor1,Programming,45.00,90,Intermediate,True,"Python, Django",2026-03-30T13:16:19.158792+00:00
+1,Python for Absolute Beginners,mentor1,Programming,25.00,60,Beginner,True,"Python, Beginner Friendly, Remote",2026-03-30T13:16:19.143648+00:00

@@ -1,21 +1,24 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="form-wrap">
-    <div class="page-header" style="text-align:center;">
-        <h1>Create your account</h1>
-        <p>Join the community and share your skills.</p>
-    </div>
-    <div class="card">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-actions">
-                <button class="btn btn-primary" style="width:100%;" type="submit">Create account</button>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="text-center mb-4">
+            <h1 class="h3 fw-bold">Create your account</h1>
+            <p class="text-muted">Join the community and share your skills.</p>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body django-form">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid mt-3">
+                        <button class="btn btn-primary" type="submit">Create account</button>
+                    </div>
+                </form>
             </div>
-        </form>
-        <hr class="divider">
-        <p style="text-align:center;color:var(--muted);font-size:.88rem;">
+        </div>
+        <p class="text-center text-muted small mt-3">
             Already have an account? <a href="{% url 'login' %}">Sign in</a>
         </p>
     </div>

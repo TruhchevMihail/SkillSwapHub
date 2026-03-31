@@ -5,11 +5,25 @@ from django.contrib.auth.forms import UserCreationForm
 UserModel = get_user_model()
 
 
+ROLE_MENTOR = 'Mentors'
+ROLE_LEARNER = 'Learners'
+ROLE_CHOICES = (
+    (ROLE_LEARNER, 'Learner - I want to book sessions'),
+    (ROLE_MENTOR, 'Mentor - I want to create offers'),
+)
+
+
 class AppUserCreateForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
         label='Email address',
         widget=forms.EmailInput(attrs={'placeholder': 'you@example.com'}),
+    )
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES,
+        initial=ROLE_LEARNER,
+        label='Account type',
+        required=False,
     )
 
     class Meta:
@@ -19,6 +33,7 @@ class AppUserCreateForm(UserCreationForm):
             'email',
             'first_name',
             'last_name',
+            'role',
             'profile_picture',
             'password1',
             'password2',

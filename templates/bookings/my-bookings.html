@@ -1,37 +1,40 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="page-header">
-    <h1>My Bookings</h1>
-    <p>Sessions you have requested.</p>
-</div>
+<h1 class="h3 mb-4"><i class="bi bi-calendar2-check"></i> My Bookings</h1>
 
 {% if bookings %}
-    <div class="card-grid">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for booking in bookings %}
-            <div class="card">
-                <div class="card-title">
-                    <a href="{% url 'booking-detail' booking.pk %}">{{ booking.offer.title }}</a>
-                </div>
-                <div class="card-meta">
-                    <span>Mentor: {{ booking.offer.owner.username }}</span>
-                </div>
-                <div style="margin-top:10px;font-size:.88rem;color:var(--muted);">
-                    {{ booking.preferred_date|date:"d M Y, H:i" }}
-                </div>
-                <div style="margin-top:8px;">
-                    {% with s=booking.status|lower %}
-                        <span class="badge badge-{{ s }}">{{ booking.status }}</span>
-                    {% endwith %}
-                </div>
-                <div class="card-actions">
-                    <a class="btn btn-ghost btn-sm" href="{% url 'booking-detail' booking.pk %}">View details</a>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{% url 'booking-detail' booking.pk %}" class="text-decoration-none text-dark">
+                                {{ booking.offer.title }}
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-1">
+                            <i class="bi bi-person"></i> {{ booking.offer.owner.username }}
+                        </p>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-clock"></i> {{ booking.preferred_date|date:"d M Y, H:i" }}
+                        </p>
+                        <div class="mt-auto">
+                            <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-outline-secondary btn-sm w-100"
+                           href="{% url 'booking-detail' booking.pk %}">View details</a>
+                    </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% else %}
     <div class="empty-state">
+        <i class="bi bi-calendar2-x fs-1 d-block mb-3 text-muted"></i>
         <p>You have no bookings yet.</p>
         <a class="btn btn-primary" href="{% url 'offer-list' %}">Browse offers</a>
     </div>
