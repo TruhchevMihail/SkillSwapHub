@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
@@ -28,11 +29,17 @@ class RegisterUserView(CreateView):
         self.object.groups.add(selected_group)
 
         login(self.request, self.object)
+        messages.success(self.request, 'Your account is ready. Welcome to SkillSwap Hub!')
         return response
 
 
 class SignInView(LoginView):
     template_name = 'accounts/login-page.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Welcome back, {self.request.user.username}!')
+        return response
 
 
 class SignOutView(LogoutView):

@@ -1,0 +1,33 @@
+<footer class="site-footer mt-auto py-4">
+    <div class="container">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <h6 class="mb-1 text-white">SkillSwap Hub</h6>
+                <p class="mb-0 small text-white-50">
+                    Learn from real people, share what you know, and build practical skills together.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex flex-wrap justify-content-md-end gap-3 small">
+                    <a class="footer-link" href="{% url 'home' %}">Home</a>
+                    <a class="footer-link" href="{% url 'offer-list' %}">Offers</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="footer-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        {% if perms.bookings.add_booking %}
+                            <a class="footer-link" href="{% url 'my-bookings' %}">My Bookings</a>
+                        {% endif %}
+                        {% if perms.offers.add_skilloffer %}
+                            <a class="footer-link" href="{% url 'my-offers' %}">My Offers</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="footer-link" href="{% url 'login' %}">Sign in</a>
+                        <a class="footer-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr class="footer-divider my-3">
+        <p class="small text-center text-white-50 mb-0">© {% now "Y" %} SkillSwap Hub. Built for people who like to learn by doing.</p>
+    </div>
+</footer>
+

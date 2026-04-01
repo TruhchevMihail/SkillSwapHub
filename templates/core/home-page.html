@@ -8,9 +8,15 @@
         <a class="btn btn-light btn-lg me-2" href="{% url 'register' %}">Get started — it's free</a>
         <a class="btn btn-outline-light btn-lg" href="{% url 'offer-list' %}">Browse offers</a>
     {% else %}
-        <a class="btn btn-light btn-lg me-2" href="{% url 'offer-create' %}">
-            <i class="bi bi-plus-circle"></i> Share a skill
-        </a>
+        {% if perms.offers.add_skilloffer %}
+            <a class="btn btn-light btn-lg me-2" href="{% url 'offer-create' %}">
+                <i class="bi bi-plus-circle"></i> Share a skill
+            </a>
+        {% else %}
+            <a class="btn btn-light btn-lg me-2" href="{% url 'dashboard' %}">
+                <i class="bi bi-speedometer2"></i> Open dashboard
+            </a>
+        {% endif %}
         <a class="btn btn-outline-light btn-lg" href="{% url 'offer-list' %}">Browse offers</a>
     {% endif %}
 </div>

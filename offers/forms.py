@@ -3,6 +3,17 @@ from .models import SkillOffer, Material, SkillCategory
 
 
 class SkillOfferBaseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.setdefault('placeholder', 'e.g. Python basics for beginners')
+        self.fields['description'].widget.attrs.setdefault(
+            'placeholder',
+            'Explain what learners will practice and who the session is for.',
+        )
+        self.fields['price_per_session'].widget.attrs.setdefault('placeholder', '35.00')
+        self.fields['duration_minutes'].widget.attrs.setdefault('placeholder', '60')
+        self.fields['category'].queryset = SkillCategory.objects.order_by('name')
+
     class Meta:
         model = SkillOffer
         fields = (
@@ -83,6 +94,11 @@ class SkillOfferFilterForm(forms.Form):
             ('price_desc', 'Price descending'),
         ],
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['search'].widget.attrs.update({'placeholder': 'Search by title or keyword'})
+        self.fields['category'].queryset = SkillCategory.objects.order_by('name')
 
 
 class MaterialUploadForm(forms.ModelForm):

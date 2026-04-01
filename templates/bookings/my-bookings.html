@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 <h1 class="h3 mb-4"><i class="bi bi-calendar2-check"></i> My Bookings</h1>
@@ -21,7 +22,7 @@
                             <i class="bi bi-clock"></i> {{ booking.preferred_date|date:"d M Y, H:i" }}
                         </p>
                         <div class="mt-auto">
-                            <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                            <span class="badge {% booking_status_class booking.status %}">{{ booking.status }}</span>
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">

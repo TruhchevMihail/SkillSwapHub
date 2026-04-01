@@ -19,6 +19,7 @@
             <div class="card-body django-form">
                 <form method="post">
                     {% csrf_token %}
+                    {% include 'common/partials/form-errors.html' %}
                     {{ form.as_p }}
                     <div class="d-flex gap-2 mt-3">
                         <button class="btn btn-primary" type="submit">Submit review</button>

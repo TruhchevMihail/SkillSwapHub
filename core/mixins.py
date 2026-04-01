@@ -39,6 +39,9 @@ class UserFilteredQuerysetMixin:
         if request is None:
             return queryset
 
+        if request.user.is_superuser:
+            return queryset
+
         return queryset.filter(**{self.user_lookup: request.user})
 
 

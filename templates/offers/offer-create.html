@@ -9,6 +9,7 @@
             <div class="card-body django-form">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    {% include 'common/partials/form-errors.html' %}
                     {{ form.as_p }}
                     <div class="d-flex gap-2 mt-2">
                         <button class="btn btn-primary" type="submit">Create offer</button>

@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="bi bi-lightning-charge-fill"></i> SkillSwap Hub
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                       href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'offer-list' %}active{% endif %}"
+                       href="{% url 'offer-list' %}">
+                        Offers
+                    </a>
+                </li>
+
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                           href="{% url 'dashboard' %}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    {% if perms.offers.add_skilloffer %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'offer-create' %}active{% endif %}"
+                               href="{% url 'offer-create' %}">
+                                Create Offer
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'my-offers' %}active{% endif %}"
+                               href="{% url 'my-offers' %}">
+                                My Offers
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if perms.bookings.add_booking %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'favorite-offers' %}active{% endif %}"
+                               href="{% url 'favorite-offers' %}">
+                                Saved
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'my-bookings' %}active{% endif %}"
+                               href="{% url 'my-bookings' %}">
+                                My Bookings
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if perms.bookings.change_booking %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'mentor-bookings' %}active{% endif %}"
+                               href="{% url 'mentor-bookings' %}">
+                                Requests
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+
+            <div class="d-flex align-items-center gap-2 ms-lg-3">
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_staff %}
+                        <a class="btn btn-sm btn-outline-light" href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
+                    <span class="navbar-text text-white-50 small d-none d-md-inline">
+                        Signed in as <strong class="text-white">{{ request.user.username }}</strong>
+                    </span>
+                    <form method="post" action="{% url 'logout' %}" class="mb-0">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-light" type="submit">Sign out</button>
+                    </form>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-light" href="{% url 'login' %}">Sign in</a>
+                    <a class="btn btn-sm btn-accent" href="{% url 'register' %}">Create account</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+

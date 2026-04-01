@@ -13,10 +13,17 @@ SkillSwap Hub е платформа за обмен на умения между
 - CRUD за оферти (owner-only защити)
 - Booking flow със статуси и role checks
 - Reviews за завършени booking-и (1 review на booking)
-- Dashboard с бизнес метрики (rating, completion rate, response time)
+- Dashboard с бизнес метрики (rating и активност)
 - Audit trail (`ActivityLog`) за ключови действия
-- Export команда за данни (JSON/CSV)
 - Bootstrap UI + custom CSS
+
+### Права по роли
+| Роля | Права |
+| --- | --- |
+| Anonymous | Достъп само до публични страници (`home`, `offers` list/detail), без private actions |
+| Learner | Създава booking, отменя позволени booking-и, добавя/редактира/трие свое review, ползва favorites |
+| Mentor | Създава/редактира/трие свои offers, вижда и обновява booking-и към своите offers |
+| Superuser | Пълен достъп в admin + bypass в app views (manage all offers/bookings/reviews) |
 
 ### Технологии
 - Django 6
@@ -46,13 +53,6 @@ Sample users (password: `testpass123`):
 - `mentor1`, `mentor2`
 - `learner1`, `learner2`
 
-### Export данни
-```bash
-python manage.py export_data
-```
-
-По подразбиране файловете се записват в `scripts/exports/`.
-
 ### Тестове и проверки
 ```bash
 python manage.py check
@@ -74,10 +74,17 @@ offers -> booking -> completed session -> review.
 - Offer CRUD with owner-only restrictions
 - Booking flow with status transitions and role checks
 - Reviews for completed bookings (1 review per booking)
-- Dashboard with business metrics (rating, completion rate, response time)
+- Dashboard with business metrics (rating and activity)
 - Audit trail (`ActivityLog`) for important actions
-- Data export command (JSON/CSV)
 - Bootstrap UI + custom CSS
+
+### Role permissions
+| Role | Permissions |
+| --- | --- |
+| Anonymous | Access to public pages only (`home`, `offers` list/detail), no private actions |
+| Learner | Can create bookings, cancel allowed bookings, create/edit/delete own reviews, use favorites |
+| Mentor | Can create/edit/delete own offers, view and update bookings for own offers |
+| Superuser | Full admin access + bypass in app views (manage all offers/bookings/reviews) |
 
 ### Tech stack
 - Django 6
@@ -107,12 +114,6 @@ Sample users (password: `testpass123`):
 - `mentor1`, `mentor2`
 - `learner1`, `learner2`
 
-### Export data
-```bash
-python manage.py export_data
-```
-
-By default files are saved to `scripts/exports/`.
 
 ### Checks and tests
 ```bash

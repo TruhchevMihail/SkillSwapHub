@@ -28,31 +28,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             avg_rating=Avg('rating')
         )['avg_rating']
 
-        mentor_bookings = Booking.objects.filter(offer__owner=user)
-        completed_as_mentor = mentor_bookings.filter(status=Booking.Status.COMPLETED).count()
-        mentor_bookings_count = context['mentor_bookings_count']
-        context['mentor_completion_rate'] = (
-            (completed_as_mentor / mentor_bookings_count) * 100 if mentor_bookings_count else 0
-        )
-
-        responded_bookings = mentor_bookings.exclude(status=Booking.Status.PENDING)
-        if responded_bookings.exists():
-            total_hours = sum(
-                (item.updated_at - item.created_at).total_seconds() / 3600
-                for item in responded_bookings
-            )
-            context['avg_response_hours'] = total_hours / responded_bookings.count()
-        else:
-            context['avg_response_hours'] = None
 
         context['top_mentors'] = (
             Review.objects.values('mentor__username')
             .annotate(avg_rating=Avg('rating'), reviews_count=Count('id'))
-            .order_by('-avg_rating')[:5]
+            .order_by('-avg_rating', '-reviews_count')[:5]
         )
 
         context['recent_activity'] = ActivityLog.objects.filter(actor=user)[:8]
-
         context['recent_my_bookings'] = (
             Booking.objects.filter(learner=user)
             .select_related('offer', 'offer__category')[:5]

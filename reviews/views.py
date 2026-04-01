@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
@@ -21,7 +22,7 @@ class ReviewCreateView(GroupRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         self.booking = get_object_or_404(Booking, pk=self.kwargs['booking_pk'])
 
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.user.is_superuser:
             if self.booking.learner != request.user:
                 raise PermissionDenied('Only the learner can review this booking.')
 
@@ -35,9 +36,10 @@ class ReviewCreateView(GroupRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.booking = self.booking
-        form.instance.author = self.request.user
+        form.instance.author = self.booking.learner if self.request.user.is_superuser else self.request.user
         form.instance.mentor = self.booking.offer.owner
         response = super().form_valid(form)
+        messages.success(self.request, 'Thanks for sharing your review.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_REVIEW_CREATED,
@@ -59,12 +61,16 @@ class ReviewUpdateView(GroupRequiredMixin, UpdateView):
     required_group_names = ('Learners',)
 
     def get_queryset(self):
-        return Review.objects.filter(author=self.request.user).select_related(
+        queryset = Review.objects.select_related(
             'booking', 'booking__offer', 'mentor',
         )
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(author=self.request.user)
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        messages.success(self.request, 'Your review was updated.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_REVIEW_UPDATED,
@@ -79,19 +85,26 @@ class ReviewDeleteView(GroupRequiredMixin, DeleteView):
     required_group_names = ('Learners',)
 
     def get_queryset(self):
-        return Review.objects.filter(author=self.request.user)
+        queryset = Review.objects.all()
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(author=self.request.user)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
+        mentor_name = self.object.mentor.username
         log_activity(
             actor=request.user,
             action=ActivityLog.ACTION_REVIEW_DELETED,
             target_object=self.object,
         )
-        return super().delete(request, *args, **kwargs)
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f'Your review for {mentor_name} was deleted.')
+        return response
 
     def get_success_url(self):
         return reverse_lazy('offer-detail', kwargs={'pk': self.object.booking.offer.pk})
+
 
 
 

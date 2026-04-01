@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Avg, Count, Q
 from django.http import HttpResponseRedirect
@@ -79,6 +80,13 @@ class OfferDetailView(DetailView):
         )
         context['mentor_avg_rating'] = mentor_rating_stats['avg_rating']
         context['mentor_reviews_count'] = mentor_rating_stats['reviews_count']
+
+        is_favorite = False
+        if self.request.user.is_authenticated:
+            favorite_list, _ = FavoriteList.objects.get_or_create(user=self.request.user)
+            is_favorite = favorite_list.offers.filter(pk=self.object.pk).exists()
+
+        context['is_favorite'] = is_favorite
         return context
 
 
@@ -91,6 +99,7 @@ class OfferCreateView(GroupRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         response = super().form_valid(form)
+        messages.success(self.request, 'Your offer is now live.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_OFFER_CREATED,
@@ -108,6 +117,7 @@ class OfferUpdateView(GroupRequiredMixin, UserFilteredQuerysetMixin, UpdateView)
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        messages.success(self.request, 'Offer details updated successfully.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_OFFER_UPDATED,
@@ -125,13 +135,16 @@ class OfferDeleteView(GroupRequiredMixin, UserFilteredQuerysetMixin, DeleteView)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
+        offer_title = self.object.title
         log_activity(
             actor=request.user,
             action=ActivityLog.ACTION_OFFER_DELETED,
             target_object=self.object,
             note=f'Deleted offer: {self.object}',
         )
-        return super().delete(request, *args, **kwargs)
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f'Offer “{offer_title}” was deleted.')
+        return response
 
 
 class MyOffersListView(GroupRequiredMixin, ListView):
@@ -141,7 +154,10 @@ class MyOffersListView(GroupRequiredMixin, ListView):
     required_group_names = ('Mentors',)
 
     def get_queryset(self):
-        return SkillOffer.objects.filter(owner=self.request.user).select_related('category').prefetch_related('tags')
+        queryset = SkillOffer.objects.select_related('category').prefetch_related('tags')
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(owner=self.request.user)
 
 
 class FavoriteOffersListView(GroupRequiredMixin, ListView):
@@ -158,6 +174,7 @@ class FavoriteOffersListView(GroupRequiredMixin, ListView):
 class ToggleFavoriteView(LoginRequiredMixin, View):
     def post(self, request, pk):
         if not request.user.is_superuser and not request.user.groups.filter(name='Learners').exists():
+            messages.warning(request, 'Only learners can save offers to favourites.')
             return HttpResponseRedirect(reverse_lazy('offer-list'))
 
         offer = get_object_or_404(SkillOffer, pk=pk)
@@ -165,7 +182,9 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
 
         if offer in favorite_list.offers.all():
             favorite_list.offers.remove(offer)
+            messages.info(request, 'Offer removed from your saved list.')
         else:
             favorite_list.offers.add(offer)
+            messages.success(request, 'Offer added to your saved list.')
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse_lazy('offer-list')))

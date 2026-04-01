@@ -11,6 +11,7 @@
             <div class="card-body django-form">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    {% include 'common/partials/form-errors.html' %}
                     {{ form.as_p }}
                     <div class="d-grid mt-3">
                         <button class="btn btn-primary" type="submit">Create account</button>

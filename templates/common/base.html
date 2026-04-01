@@ -11,93 +11,14 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">⚡ SkillSwap Hub</a>
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'offer-list' %}">
-                        <i class="bi bi-grid"></i> Browse Offers
-                    </a>
-                </li>
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">
-                            <i class="bi bi-speedometer2"></i> Dashboard
-                        </a>
-                    </li>
-                    {% if perms.offers.add_skilloffer %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'offer-create' %}">
-                                <i class="bi bi-plus-circle"></i> New Offer
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'my-offers' %}">My Offers</a>
-                        </li>
-                    {% endif %}
-                    {% if perms.bookings.add_booking %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'favorite-offers' %}">
-                                <i class="bi bi-bookmark"></i> Saved
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'my-bookings' %}">My Bookings</a>
-                        </li>
-                    {% endif %}
-                    {% if perms.bookings.change_booking %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'mentor-bookings' %}">Requests</a>
-                        </li>
-                    {% endif %}
-                {% endif %}
-            </ul>
-
-            <ul class="navbar-nav ms-auto align-items-center gap-2">
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <span class="navbar-text text-white-50 small">
-                            <i class="bi bi-person-circle"></i> {{ request.user.username }}
-                        </span>
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button class="btn btn-sm btn-outline-light" type="submit">Sign out</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="btn btn-sm btn-outline-light" href="{% url 'login' %}">Sign in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-sm text-white"
-                           href="{% url 'register' %}"
-                           style="background:var(--ss-accent);">Create account</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
+{% include 'common/partials/navbar.html' %}
 
 <main class="container my-4 flex-grow-1">
+    {% include 'common/partials/messages.html' %}
     {% block content %}{% endblock %}
 </main>
 
-<footer class="py-3">
-    <div class="container text-center">
-        <small>&copy; {% now "Y" %} SkillSwap Hub &mdash; learn by sharing, share by learning</small>
-    </div>
-</footer>
+{% include 'common/partials/footer.html' %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

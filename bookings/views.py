@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
@@ -24,7 +25,7 @@ class BookingCreateView(GroupRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         self.offer = get_object_or_404(SkillOffer, pk=self.kwargs['offer_pk'])
 
-        if request.user.is_authenticated and self.offer.owner == request.user:
+        if request.user.is_authenticated and not request.user.is_superuser and self.offer.owner == request.user:
             raise PermissionDenied('You cannot book your own offer.')
 
         return super().dispatch(request, *args, **kwargs)
@@ -33,6 +34,7 @@ class BookingCreateView(GroupRequiredMixin, CreateView):
         form.instance.offer = self.offer
         form.instance.learner = self.request.user
         response = super().form_valid(form)
+        messages.success(self.request, 'Your booking request was sent successfully.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_BOOKING_CREATED,
@@ -54,9 +56,10 @@ class MyBookingsListView(GroupRequiredMixin, ListView):
     required_group_names = ('Learners',)
 
     def get_queryset(self):
-        return Booking.objects.filter(
-            learner=self.request.user
-        ).select_related('offer', 'offer__owner', 'offer__category')
+        queryset = Booking.objects.select_related('offer', 'offer__owner', 'offer__category')
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(learner=self.request.user)
 
 
 class MentorBookingsListView(GroupRequiredMixin, ListView):
@@ -66,9 +69,10 @@ class MentorBookingsListView(GroupRequiredMixin, ListView):
     required_group_names = ('Mentors',)
 
     def get_queryset(self):
-        return Booking.objects.filter(
-            offer__owner=self.request.user
-        ).select_related('offer', 'learner', 'offer__category')
+        queryset = Booking.objects.select_related('offer', 'learner', 'offer__category')
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(offer__owner=self.request.user)
 
 
 class BookingDetailView(LoginRequiredMixin, DetailView):
@@ -77,10 +81,13 @@ class BookingDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'booking'
 
     def get_queryset(self):
-        return Booking.objects.filter(
+        queryset = Booking.objects.select_related('offer', 'learner', 'offer__owner', 'offer__category', 'review')
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(
             Q(learner=self.request.user) |
             Q(offer__owner=self.request.user)
-        ).select_related('offer', 'learner', 'offer__owner', 'offer__category', 'review')
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -101,7 +108,10 @@ class BookingStatusUpdateView(GroupRequiredMixin, UpdateView):
     required_group_names = ('Mentors',)
 
     def get_queryset(self):
-        return Booking.objects.filter(offer__owner=self.request.user)
+        queryset = Booking.objects.all()
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(offer__owner=self.request.user)
 
     def form_valid(self, form):
         booking = form.instance
@@ -111,6 +121,7 @@ class BookingStatusUpdateView(GroupRequiredMixin, UpdateView):
             raise PermissionDenied('Cancelled bookings cannot be updated.')
 
         response = super().form_valid(form)
+        messages.success(self.request, f'Booking status changed from {previous_status} to {self.object.status}.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_BOOKING_STATUS_CHANGED,
@@ -124,17 +135,17 @@ class BookingCancelView(GroupRequiredMixin, View):
     required_group_names = ('Learners',)
 
     def post(self, request, pk):
-        booking = get_object_or_404(
-            Booking,
-            pk=pk,
-            learner=request.user,
-        )
+        booking_lookup = {'pk': pk}
+        if not request.user.is_superuser:
+            booking_lookup['learner'] = request.user
+        booking = get_object_or_404(Booking, **booking_lookup)
 
         if booking.status not in [Booking.Status.PENDING, Booking.Status.APPROVED]:
             raise PermissionDenied('Only pending or approved bookings can be cancelled.')
 
         booking.status = Booking.Status.CANCELLED
         booking.save()
+        messages.success(request, 'Booking cancelled successfully.')
 
         log_activity(
             actor=request.user,

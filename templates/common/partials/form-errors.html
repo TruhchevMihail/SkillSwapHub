@@ -1,0 +1,19 @@
+{% if form.errors %}
+    <div class="alert alert-danger shadow-sm mb-4">
+        <p class="fw-semibold mb-2">Please fix the highlighted fields.</p>
+        <ul class="mb-0 small">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>
+                        {% if field == '__all__' %}
+                            {{ error }}
+                        {% else %}
+                            {{ field|capfirst }}: {{ error }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+

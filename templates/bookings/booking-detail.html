@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -15,7 +16,7 @@
                     <dt>Date</dt>     <dd>{{ booking.preferred_date|date:"d M Y, H:i" }}</dd>
                     <dt>Status</dt>
                     <dd>
-                        <span class="badge badge-{{ booking.status|lower }}">{{ booking.status }}</span>
+                        <span class="badge {% booking_status_class booking.status %}">{{ booking.status }}</span>
                     </dd>
                 </dl>
 
@@ -29,7 +30,7 @@
                 <hr>
 
                 <div class="d-flex flex-wrap gap-2">
-                    {% if request.user == booking.learner %}
+                    {% if request.user == booking.learner or request.user.is_superuser %}
                         {% if booking.status == 'Pending' or booking.status == 'Approved' %}
                             <form method="post" action="{% url 'booking-cancel' booking.pk %}">
                                 {% csrf_token %}
@@ -38,20 +39,20 @@
                                 </button>
                             </form>
                         {% endif %}
-                        {% if can_leave_review %}
-                                <a class="btn btn-warning btn-sm"
-                                   href="{% url 'review-create' booking.pk %}">
-                                    <i class="bi bi-star-half"></i> Leave a review
-                                </a>
-                        {% elif request.user == booking.learner and review_obj %}
-                                <a class="btn btn-outline-secondary btn-sm"
-                                   href="{% url 'review-edit' review_obj.pk %}">
-                                    <i class="bi bi-pencil"></i> Edit my review
-                                </a>
+                        {% if can_leave_review or request.user.is_superuser and booking.status == 'Completed' and not review_obj %}
+                            <a class="btn btn-warning btn-sm"
+                               href="{% url 'review-create' booking.pk %}">
+                                <i class="bi bi-star-half"></i> Leave a review
+                            </a>
+                        {% elif review_obj %}
+                            <a class="btn btn-outline-secondary btn-sm"
+                               href="{% url 'review-edit' review_obj.pk %}">
+                                <i class="bi bi-pencil"></i> Edit my review
+                            </a>
                         {% endif %}
                     {% endif %}
 
-                    {% if request.user == booking.offer.owner %}
+                    {% if request.user == booking.offer.owner or request.user.is_superuser %}
                         <a class="btn btn-primary btn-sm"
                            href="{% url 'booking-status-update' booking.pk %}">
                             <i class="bi bi-pencil"></i> Update status

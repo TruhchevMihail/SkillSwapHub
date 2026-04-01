@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -10,7 +11,7 @@
                 <dl class="info-grid mb-0">
                     <dt>Offer</dt>    <dd>{{ offer.title }}</dd>
                     <dt>Mentor</dt>  <dd>{{ offer.owner.username }}</dd>
-                    <dt>Price</dt>   <dd class="fw-semibold text-primary">€{{ offer.price_per_session }}</dd>
+                    <dt>Price</dt>   <dd class="fw-semibold text-primary">{{ offer.price_per_session|price_badge }}</dd>
                     <dt>Duration</dt><dd>{{ offer.duration_minutes }} min</dd>
                 </dl>
             </div>
@@ -20,6 +21,7 @@
             <div class="card-body django-form">
                 <form method="post">
                     {% csrf_token %}
+                    {% include 'common/partials/form-errors.html' %}
                     {{ form.as_p }}
                     <div class="d-flex gap-2 mt-2">
                         <button class="btn btn-primary" type="submit">Submit booking</button>

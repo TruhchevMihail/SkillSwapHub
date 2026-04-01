@@ -11,6 +11,16 @@ body { background: #f0f2f8; }
 /* ── Navbar ── */
 .navbar { background: var(--ss-dark) !important; }
 .navbar-brand { font-weight: 700; letter-spacing: .3px; }
+.btn-accent {
+    background: var(--ss-accent);
+    border-color: var(--ss-accent);
+    color: #fff;
+}
+.btn-accent:hover {
+    background: #d91b70;
+    border-color: #d91b70;
+    color: #fff;
+}
 
 /* ── Hero ── */
 .hero {
@@ -28,6 +38,11 @@ body { background: #f0f2f8; }
 .card { border: 1px solid #dde1ec; border-radius: 10px; transition: box-shadow .2s, transform .2s; }
 .card:hover { box-shadow: 0 6px 24px rgba(67,97,238,.13); transform: translateY(-2px); }
 .card-img-top { height: 160px; object-fit: cover; border-radius: 10px 10px 0 0; }
+.offer-card-placeholder {
+    height: 160px;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(180deg, #f7f8fd 0%, #eef1f9 100%);
+}
 
 /* ── Skill-level & status badges ── */
 .badge-beginner     { background: #d1fae5; color: #065f46; }
@@ -76,6 +91,16 @@ body { background: #f0f2f8; }
 
 /* ── Footer ── */
 footer { background: var(--ss-dark); color: rgba(255,255,255,.5); font-size: .82rem; }
+.site-footer .footer-link {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+}
+.site-footer .footer-link:hover {
+    color: #fff;
+}
+.site-footer .footer-divider {
+    border-color: rgba(255, 255, 255, 0.12);
+}
 
 /* ── Dashboard stat cards ── */
 .stat-card .card-body { padding: 1rem .5rem; }
@@ -89,6 +114,7 @@ footer { background: var(--ss-dark); color: rgba(255,255,255,.5); font-size: .82
 
 /* ── Radio rating widget ── */
 .django-form input[type=radio] { width: auto; margin-right: 4px; }
+
 
 
 
