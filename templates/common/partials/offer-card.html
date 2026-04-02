@@ -1,7 +1,9 @@
 {% load custom_tags %}
-<div class="card h-100 shadow-sm offer-card">
+<div class="card h-100 shadow-sm offer-card" style="cursor: pointer;">
     {% if offer.image %}
-        <img src="{{ offer.image.url }}" alt="{{ offer.title }}" class="card-img-top">
+        <div class="card-img-wrapper">
+            <img src="{{ offer.image.url }}" alt="{{ offer.title }}" class="card-img-top">
+        </div>
     {% else %}
         <div class="offer-card-placeholder d-flex align-items-center justify-content-center">
             <i class="bi bi-image text-muted fs-1"></i>
@@ -22,7 +24,8 @@
         </div>
 
         <h5 class="card-title mb-2">
-            <a href="{% url 'offer-detail' offer.pk %}" class="text-decoration-none text-dark">
+            <a href="{% url 'offer-detail' offer.pk %}"
+               class="text-decoration-none text-dark stretched-link">
                 {{ offer.title }}
             </a>
         </h5>
@@ -39,14 +42,19 @@
             <span class="fw-semibold text-primary">{{ offer.price_per_session|price_badge }}</span>
 
             {% if show_manage_actions %}
-                <div class="d-flex gap-2">
-                    <a class="btn btn-outline-primary btn-sm" href="{% url 'offer-edit' offer.pk %}">Edit</a>
-                    <a class="btn btn-outline-danger btn-sm" href="{% url 'offer-delete' offer.pk %}">Delete</a>
+                <div class="d-flex gap-2" style="position: relative; z-index: 2;">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'offer-edit' offer.pk %}">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a class="btn btn-outline-danger btn-sm" href="{% url 'offer-delete' offer.pk %}">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
                 </div>
             {% else %}
-                <a class="btn btn-outline-primary btn-sm" href="{% url 'offer-detail' offer.pk %}">View details</a>
+                <span class="text-muted small">
+                    <i class="bi bi-arrow-right-circle"></i> View details
+                </span>
             {% endif %}
         </div>
     </div>
 </div>
-

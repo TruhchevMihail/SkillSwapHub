@@ -154,10 +154,12 @@ class MyOffersListView(GroupRequiredMixin, ListView):
     required_group_names = ('Mentors',)
 
     def get_queryset(self):
-        queryset = SkillOffer.objects.select_related('category').prefetch_related('tags')
-        if self.request.user.is_superuser:
-            return queryset
-        return queryset.filter(owner=self.request.user)
+        return (
+            SkillOffer.objects
+            .filter(owner=self.request.user)
+            .select_related('category')
+            .prefetch_related('tags')
+        )
 
 
 class FavoriteOffersListView(GroupRequiredMixin, ListView):
