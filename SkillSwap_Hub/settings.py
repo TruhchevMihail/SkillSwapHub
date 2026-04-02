@@ -18,8 +18,9 @@ def env_list(name: str, default: str = '') -> list[str]:
 
 
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
-DEBUG = env_bool('DEBUG', True)
-ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost')
+DEBUG = os.getenv('DEBUG') == "True"
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', default='127.0.0.1,localhost')
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
 
 
 # Application definition
