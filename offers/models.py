@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -58,11 +59,7 @@ class SkillOffer(models.Model):
         default=LEVEL_BEGINNER,
     )
 
-    image = models.ImageField(
-        upload_to='offer_images/',
-        blank=True,
-        null=True,
-    )
+    image = CloudinaryField('image')
 
     is_active = models.BooleanField(
         default=True,
