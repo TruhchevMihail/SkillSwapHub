@@ -10,6 +10,8 @@ urlpatterns = [
     path('offers/', include('offers.urls')),
     path('bookings/', include('bookings.urls')),
     path('reviews/', include('reviews.urls')),
+    path('api/offers/', include('offers.api_urls')),
+    path('api/bookings/', include('bookings.api_urls')),
 ]
 
 if settings.DEBUG:

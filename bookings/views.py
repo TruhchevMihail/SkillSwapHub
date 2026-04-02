@@ -11,6 +11,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from core.activity import log_activity
 from core.mixins import GroupRequiredMixin
 from core.models import ActivityLog
+from notifications.tasks import send_booking_reminder, send_review_reminder
 from offers.models import SkillOffer
 from .forms import BookingCreateForm, BookingStatusUpdateForm
 from .models import Booking
@@ -114,19 +115,27 @@ class BookingStatusUpdateView(GroupRequiredMixin, UpdateView):
         return queryset.filter(offer__owner=self.request.user)
 
     def form_valid(self, form):
-        booking = form.instance
         previous_status = self.get_object().status
 
         if previous_status == Booking.Status.CANCELLED:
             raise PermissionDenied('Cancelled bookings cannot be updated.')
 
         response = super().form_valid(form)
-        messages.success(self.request, f'Booking status changed from {previous_status} to {self.object.status}.')
+        new_status = self.object.status
+
+        if previous_status != new_status:
+            if new_status == Booking.Status.APPROVED:
+                send_booking_reminder.delay(self.object.pk)
+
+            if new_status == Booking.Status.COMPLETED:
+                send_review_reminder.delay(self.object.pk)
+
+        messages.success(self.request, 'Booking status updated successfully.')
         log_activity(
             actor=self.request.user,
             action=ActivityLog.ACTION_BOOKING_STATUS_CHANGED,
             target_object=self.object,
-            note=f'Status {previous_status} -> {self.object.status}',
+            note=f'Status {previous_status} -> {new_status}',
         )
         return response
 
