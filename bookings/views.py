@@ -57,10 +57,11 @@ class MyBookingsListView(GroupRequiredMixin, ListView):
     required_group_names = ('Learners',)
 
     def get_queryset(self):
-        queryset = Booking.objects.select_related('offer', 'offer__owner', 'offer__category')
-        if self.request.user.is_superuser:
-            return queryset
-        return queryset.filter(learner=self.request.user)
+        return (
+            Booking.objects
+            .filter(learner=self.request.user)
+            .select_related('offer', 'offer__owner', 'offer__category')
+        )
 
 
 class MentorBookingsListView(GroupRequiredMixin, ListView):
@@ -70,10 +71,11 @@ class MentorBookingsListView(GroupRequiredMixin, ListView):
     required_group_names = ('Mentors',)
 
     def get_queryset(self):
-        queryset = Booking.objects.select_related('offer', 'learner', 'offer__category')
-        if self.request.user.is_superuser:
-            return queryset
-        return queryset.filter(offer__owner=self.request.user)
+        return (
+            Booking.objects
+            .filter(offer__owner=self.request.user)
+            .select_related('offer', 'learner', 'offer__category')
+        )
 
 
 class BookingDetailView(LoginRequiredMixin, DetailView):
@@ -115,7 +117,7 @@ class BookingStatusUpdateView(GroupRequiredMixin, UpdateView):
         return queryset.filter(offer__owner=self.request.user)
 
     def form_valid(self, form):
-        previous_status = self.get_object().status
+        previous_status = self.object.status  # self.object already populated — no extra DB hit
 
         if previous_status == Booking.Status.CANCELLED:
             raise PermissionDenied('Cancelled bookings cannot be updated.')

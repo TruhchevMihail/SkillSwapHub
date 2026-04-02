@@ -44,12 +44,14 @@
                                href="{% url 'review-create' booking.pk %}">
                                 <i class="bi bi-star-half"></i> Leave a review
                             </a>
-                        {% elif review_obj %}
-                            <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'review-edit' review_obj.pk %}">
-                                <i class="bi bi-pencil"></i> Edit my review
-                            </a>
                         {% endif %}
+                    {% endif %}
+
+                    {% if review_obj and request.user == review_obj.author or review_obj and request.user.is_superuser %}
+                        <a class="btn btn-outline-secondary btn-sm"
+                           href="{% url 'review-edit' review_obj.pk %}">
+                            <i class="bi bi-pencil"></i> Edit review
+                        </a>
                     {% endif %}
 
                     {% if request.user == booking.offer.owner or request.user.is_superuser %}
