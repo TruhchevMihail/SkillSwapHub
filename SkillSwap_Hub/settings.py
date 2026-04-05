@@ -147,14 +147,11 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# STORAGES = {
-#     'default': {
-#         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-#     },
-#     'staticfiles': {
-#         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-#     },
-# }
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
