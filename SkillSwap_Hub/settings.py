@@ -18,10 +18,20 @@ def env_list(name: str, default: str = '') -> list[str]:
     return [item.strip() for item in raw_value.split(',') if item.strip()]
 
 
+def normalize_csrf_origins(values: list[str]) -> list[str]:
+    normalized = []
+    for value in values:
+        if value.startswith('http://') or value.startswith('https://'):
+            normalized.append(value)
+        else:
+            normalized.append(f'https://{value}')
+    return normalized
+
+
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 DEBUG = env_bool('DEBUG', default=False)
 ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', default='127.0.0.1,localhost')
-CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
+CSRF_TRUSTED_ORIGINS = normalize_csrf_origins(env_list('CSRF_TRUSTED_ORIGINS'))
 
 
 # Application definition
@@ -137,14 +147,14 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STORAGES = {
-    'default': {
-        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+# STORAGES = {
+#     'default': {
+#         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+#     },
+#     'staticfiles': {
+#         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+#     },
+# }
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
