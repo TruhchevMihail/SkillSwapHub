@@ -4,7 +4,7 @@ from django.db import models
 
 
 class AppUser(AbstractUser):
-    profile_picture = CloudinaryField('image', blank=True, null=True)
+    profile_picture = CloudinaryField('image')
 
     def __str__(self):
         return self.username

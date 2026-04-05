@@ -1,6 +1,6 @@
 {% load custom_tags %}
 <div class="card h-100 shadow-sm offer-card" style="cursor: pointer;">
-    {% if offer.image %}
+    {% if offer.image.public_id %}
         <div class="card-img-wrapper">
             <img src="{{ offer.image.url }}" alt="{{ offer.title }}" class="card-img-top">
         </div>

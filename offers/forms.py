@@ -5,6 +5,7 @@ from .models import SkillOffer, Material, SkillCategory
 class SkillOfferBaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['image'].required = False
         self.fields['title'].widget.attrs.setdefault('placeholder', 'e.g. Python basics for beginners')
         self.fields['description'].widget.attrs.setdefault(
             'placeholder',

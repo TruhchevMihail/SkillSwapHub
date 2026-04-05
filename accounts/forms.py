@@ -26,6 +26,10 @@ class AppUserCreateForm(UserCreationForm):
         required=False,
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['profile_picture'].required = False
+
     class Meta:
         model = UserModel
         fields = (
