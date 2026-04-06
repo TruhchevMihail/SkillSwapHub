@@ -2,10 +2,20 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import AppUserProfileEditForm
+
 UserModel = get_user_model()
 
 
 class AccountsPageTests(TestCase):
+    def test_profile_edit_form_has_readonly_disabled_username(self):
+        user = UserModel.objects.create_user(username='readonlyuser', password='pass12345')
+
+        form = AppUserProfileEditForm(instance=user)
+
+        self.assertTrue(form.fields['username'].disabled)
+        self.assertEqual(form.fields['username'].widget.attrs.get('readonly'), 'readonly')
+
     def test_register_page_is_accessible_for_guests(self):
         response = self.client.get(reverse('register'))
 
