@@ -1,0 +1,204 @@
+{% extends 'common/base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100 profile-panel">
+            <div class="card-header bg-transparent fw-semibold">Public profile</div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    {% if profile_user.profile_picture.public_id %}
+                        <div class="profile-summary-avatar-frame mb-3"
+                             style="width: 128px; height: 128px; max-width: 128px; max-height: 128px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border-radius: 12px;">
+                            <img src="{{ profile_user.profile_picture.url }}"
+                                 alt="{{ profile_user.username }}"
+                                 class="profile-summary-avatar-img"
+                                 width="128"
+                                 height="128"
+                                 style="width: 128px; height: 128px; max-width: 128px; max-height: 128px; object-fit: contain; object-position: center center; display: block; margin: 0 auto;">
+                        </div>
+                    {% else %}
+                        <div class="profile-summary-avatar-frame profile-avatar-placeholder mb-3"
+                             style="width: 128px; height: 128px; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border-radius: 12px;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    {% endif %}
+                    <h1 class="h3 mb-1">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
+                    <p class="text-muted mb-3">@{{ profile_user.username }}</p>
+
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                        {% if profile_user.is_staff %}
+                            <span class="profile-role-badge profile-role-admin"><i class="bi bi-shield-lock"></i> Admin</span>
+                        {% endif %}
+                        {% for group in profile_user.groups.all %}
+                            {% if group.name == 'Mentors' %}
+                                <span class="profile-role-badge profile-role-mentor"><i class="bi bi-mortarboard"></i> Mentor</span>
+                            {% elif group.name == 'Learners' %}
+                                <span class="profile-role-badge profile-role-learner"><i class="bi bi-journal-check"></i> Learner</span>
+                            {% else %}
+                                <span class="profile-role-badge profile-role-default">{{ group.name }}</span>
+                            {% endif %}
+                        {% empty %}
+                            {% if not profile_user.is_staff %}
+                                <span class="profile-role-badge profile-role-default">Member</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="profile-chip profile-chip-dark"><i class="bi bi-calendar3"></i> Joined {{ profile_user.date_joined|date:"d M Y" }}</span>
+                        {% if avg_rating %}
+                            <span class="profile-chip profile-chip-dark"><i class="bi bi-star-fill text-warning"></i> {{ avg_rating|floatformat:1 }}/5 ({{ reviews_count }})</span>
+                        {% else %}
+                            <span class="profile-chip profile-chip-dark"><i class="bi bi-star"></i> No ratings yet</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <ul class="list-group list-group-flush profile-highlight-list">
+                    <li class="list-group-item profile-highlight-item">
+                        <span class="text-muted small">Reviews received</span>
+                        <strong>{{ reviews_count }}</strong>
+                    </li>
+                    <li class="list-group-item profile-highlight-item">
+                        <span class="text-muted small">Active offers</span>
+                        <strong>{{ active_offers_count }} / {{ offers_count }}</strong>
+                    </li>
+                    <li class="list-group-item profile-highlight-item">
+                        <span class="text-muted small">Completed mentor sessions</span>
+                        <strong>{{ completed_sessions_as_mentor }}</strong>
+                    </li>
+                </ul>
+
+                {% if request.user.is_authenticated and request.user == profile_user %}
+                    <div class="d-grid gap-2 mt-3">
+                        <a class="btn btn-primary" href="{% url 'profile-edit' %}">
+                            <i class="bi bi-pencil-square"></i> Edit profile
+                        </a>
+                        <a class="btn btn-outline-secondary" href="{% url 'password-change' %}">
+                            <i class="bi bi-shield-lock"></i> Change password
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="small text-muted mt-2">
+                        This is a public profile view.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4 profile-panel">
+            <div class="card-header bg-transparent fw-semibold">Profile information</div>
+            <div class="card-body">
+                <dl class="info-grid mb-0">
+                    <dt>Email</dt>
+                    <dd>{{ profile_user.email|default:'Not set yet' }}</dd>
+                    <dt>Joined</dt>
+                    <dd>{{ profile_user.date_joined|date:"d M Y" }}</dd>
+                    <dt>Last login</dt>
+                    <dd>{{ profile_user.last_login|date:"d M Y, H:i"|default:'No login yet' }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm text-center h-100 stat-card">
+                    <div class="card-body">
+                        <div class="stat-number">{{ offers_count }}</div>
+                        <div class="stat-label">Offers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm text-center h-100 stat-card">
+                    <div class="card-body">
+                        <div class="stat-number">{{ active_offers_count }}</div>
+                        <div class="stat-label">Active offers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm text-center h-100 stat-card">
+                    <div class="card-body">
+                        <div class="stat-number">{{ bookings_as_learner_count }}</div>
+                        <div class="stat-label">Bookings</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm text-center h-100 stat-card">
+                    <div class="card-body">
+                        <div class="stat-number">{{ written_reviews_count }}</div>
+                        <div class="stat-label">Reviews written</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm text-center h-100 stat-card">
+                    <div class="card-body">
+                        <div class="stat-number">{{ completed_sessions_as_mentor }}</div>
+                        <div class="stat-label">Mentor sessions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4 profile-panel">
+            <div class="card-header bg-transparent fw-semibold">Latest offers</div>
+            <div class="card-body p-0">
+                {% if recent_offers %}
+                    <ul class="list-group list-group-flush">
+                        {% for offer in recent_offers %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a class="text-decoration-none fw-semibold" href="{% url 'offer-detail' offer.pk %}">{{ offer.title }}</a>
+                                <span class="badge bg-light text-secondary border">{{ offer.category.name }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No offers yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm profile-panel">
+            <div class="card-header bg-transparent fw-semibold">Latest received reviews</div>
+            <div class="card-body p-0">
+                {% if recent_received_reviews %}
+                    <ul class="list-group list-group-flush">
+                        {% for review in recent_received_reviews %}
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <a class="fw-semibold text-decoration-none" href="{% url 'profile-detail' review.author.username %}">
+                                            {{ review.author.username }}
+                                        </a>
+                                        <span class="text-muted small ms-2">{{ review.created_at|date:"d M Y" }}</span>
+                                        <div class="text-muted small">
+                                            on <a href="{% url 'offer-detail' review.booking.offer.pk %}">{{ review.booking.offer.title }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="star-rating text-warning">{{ review.rating|stars }}</div>
+                                </div>
+                                <p class="text-secondary mb-0 mt-2">{{ review.comment|truncatechars:140 }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted p-3 mb-0">No reviews yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+

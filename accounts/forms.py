@@ -56,3 +56,30 @@ class AppUserCreateForm(UserCreationForm):
             'first_name': forms.TextInput(attrs={'placeholder': 'John'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'Doe'}),
         }
+
+
+class AppUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserModel
+        fields = (
+            'first_name',
+            'last_name',
+            'email',
+            'profile_picture',
+        )
+        labels = {
+            'first_name': 'First name',
+            'last_name': 'Last name',
+            'email': 'Email address',
+            'profile_picture': 'Profile picture',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={'placeholder': 'John'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Doe'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'you@example.com'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['profile_picture'].required = False
+

@@ -31,8 +31,11 @@
         </h5>
 
         {% if show_owner %}
-            <p class="text-muted small mb-2">
-                <i class="bi bi-person"></i> {{ offer.owner.username }}
+            <p class="text-muted small mb-2 position-relative" style="z-index: 2;">
+                <i class="bi bi-person"></i>
+                <a href="{% url 'profile-detail' offer.owner.username %}" class="text-muted text-decoration-none">
+                    {{ offer.owner.username }}
+                </a>
             </p>
         {% endif %}
 

@@ -10,7 +10,12 @@
             <div class="card-body">
                 <dl class="info-grid mb-0">
                     <dt>Offer</dt>    <dd>{{ offer.title }}</dd>
-                    <dt>Mentor</dt>  <dd>{{ offer.owner.username }}</dd>
+                    <dt>Mentor</dt>
+                    <dd>
+                        <a href="{% url 'profile-detail' offer.owner.username %}" class="text-decoration-none">
+                            {{ offer.owner.username }}
+                        </a>
+                    </dd>
                     <dt>Price</dt>   <dd class="fw-semibold text-primary">{{ offer.price_per_session|price_badge }}</dd>
                     <dt>Duration</dt><dd>{{ offer.duration_minutes }} min</dd>
                 </dl>

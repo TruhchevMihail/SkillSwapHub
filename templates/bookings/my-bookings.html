@@ -16,8 +16,11 @@
                                 {{ booking.offer.title }}
                             </a>
                         </h5>
-                        <p class="text-muted small mb-1">
-                            <i class="bi bi-person"></i> {{ booking.offer.owner.username }}
+                        <p class="text-muted small mb-1 position-relative" style="z-index: 2;">
+                            <i class="bi bi-person"></i>
+                            <a href="{% url 'profile-detail' booking.offer.owner.username %}" class="text-muted text-decoration-none">
+                                {{ booking.offer.owner.username }}
+                            </a>
                         </p>
                         <p class="text-muted small mb-2">
                             <i class="bi bi-clock"></i> {{ booking.preferred_date|date:"d M Y, H:i" }}

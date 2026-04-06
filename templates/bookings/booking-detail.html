@@ -11,8 +11,18 @@
                 <dl class="info-grid">
                     <dt>Offer</dt>
                     <dd><a href="{% url 'offer-detail' booking.offer.pk %}">{{ booking.offer.title }}</a></dd>
-                    <dt>Mentor</dt>   <dd>{{ booking.offer.owner.username }}</dd>
-                    <dt>Learner</dt>  <dd>{{ booking.learner.username }}</dd>
+                    <dt>Mentor</dt>
+                    <dd>
+                        <a href="{% url 'profile-detail' booking.offer.owner.username %}" class="text-decoration-none">
+                            {{ booking.offer.owner.username }}
+                        </a>
+                    </dd>
+                    <dt>Learner</dt>
+                    <dd>
+                        <a href="{% url 'profile-detail' booking.learner.username %}" class="text-decoration-none">
+                            {{ booking.learner.username }}
+                        </a>
+                    </dd>
                     <dt>Date</dt>     <dd>{{ booking.preferred_date|date:"d M Y, H:i" }}</dd>
                     <dt>Status</dt>
                     <dd>

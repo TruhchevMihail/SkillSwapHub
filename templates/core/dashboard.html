@@ -4,7 +4,12 @@
 {% block content %}
 <h1 class="h3 mb-4">
     <i class="bi bi-speedometer2"></i> Dashboard
-    <small class="text-muted fs-6 fw-normal ms-2">Hi, {{ request.user.first_name|default:request.user.username }}</small>
+    <small class="text-muted fs-6 fw-normal ms-2">
+        Hi,
+        <a href="{% url 'profile-detail' request.user.username %}" class="text-decoration-none">
+            {{ request.user.first_name|default:request.user.username }}
+        </a>
+    </small>
 </h1>
 
 <div class="row g-3 mb-4">
@@ -117,7 +122,10 @@
                                         {{ booking.offer.title }}
                                     </a>
                                     <div class="text-muted small">
-                                        from {{ booking.learner.username }}
+                                        from
+                                        <a href="{% url 'profile-detail' booking.learner.username %}" class="text-decoration-none">
+                                            {{ booking.learner.username }}
+                                        </a>
                                     </div>
                                 </div>
                                 <span class="badge {% booking_status_class booking.status %}">{{ booking.status }}</span>
@@ -148,7 +156,9 @@
                     <ul class="list-group list-group-flush">
                         {% for mentor in top_mentors %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span class="fw-semibold">{{ mentor.mentor__username }}</span>
+                                <a href="{% url 'profile-detail' mentor.mentor__username %}" class="fw-semibold text-decoration-none">
+                                    {{ mentor.mentor__username }}
+                                </a>
                                 <span>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     {{ mentor.avg_rating|floatformat:1 }}

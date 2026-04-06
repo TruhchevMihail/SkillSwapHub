@@ -13,7 +13,12 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <p class="text-muted mb-3">
-                    Your review for <strong>{{ object.mentor.username }}</strong>
+                    Your review for
+                    <strong>
+                        <a href="{% url 'profile-detail' object.mentor.username %}" class="text-decoration-none">
+                            {{ object.mentor.username }}
+                        </a>
+                    </strong>
                     ({{ object.rating }}/5 stars) will be permanently removed.
                 </p>
                 <form method="post">

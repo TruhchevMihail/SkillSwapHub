@@ -10,7 +10,12 @@
             <div class="card-body">
                 <dl class="info-grid mb-0">
                     <dt>Offer</dt>    <dd>{{ object.offer.title }}</dd>
-                    <dt>Learner</dt>  <dd>{{ object.learner.username }}</dd>
+                    <dt>Learner</dt>
+                    <dd>
+                        <a href="{% url 'profile-detail' object.learner.username %}" class="text-decoration-none">
+                            {{ object.learner.username }}
+                        </a>
+                    </dd>
                     <dt>Date</dt>     <dd>{{ object.preferred_date|date:"d M Y, H:i" }}</dd>
                     <dt>Status</dt>
                     <dd><span class="badge {% booking_status_class object.status %}">{{ object.status }}</span></dd>

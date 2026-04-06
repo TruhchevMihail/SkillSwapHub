@@ -9,7 +9,12 @@
             <div class="card-body">
                 <dl class="info-grid mb-0">
                     <dt>Offer</dt>   <dd>{{ booking.offer.title }}</dd>
-                    <dt>Mentor</dt>  <dd>{{ booking.offer.owner.username }}</dd>
+                    <dt>Mentor</dt>
+                    <dd>
+                        <a href="{% url 'profile-detail' booking.offer.owner.username %}" class="text-decoration-none">
+                            {{ booking.offer.owner.username }}
+                        </a>
+                    </dd>
                     <dt>Session</dt> <dd>{{ booking.preferred_date|date:"d M Y, H:i" }}</dd>
                 </dl>
             </div>

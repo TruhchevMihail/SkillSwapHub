@@ -83,7 +83,9 @@
                         <a class="btn btn-sm btn-outline-light" href="{% url 'admin:index' %}">Admin</a>
                     {% endif %}
                     <span class="navbar-text text-white-50 small d-none d-md-inline">
-                        Signed in as <strong class="text-white">{{ request.user.username }}</strong>
+                        Signed in as
+                        <a class="text-white fw-semibold text-decoration-none"
+                           href="{% url 'profile-detail' request.user.username %}">{{ request.user.username }}</a>
                     </span>
                     <form method="post" action="{% url 'logout' %}" class="mb-0">
                         {% csrf_token %}
